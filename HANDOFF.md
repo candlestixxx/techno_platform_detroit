@@ -19,6 +19,8 @@ In this concluding UX enhancement iteration, we bound the `mapboxgl.Marker` comp
 
 To wrap up the architecture, we implemented Playwright E2E browser tests and hooked up `Cache-Control` Headers to critical data endpoints to prevent rate limits.
 
+Finally, we established a GitHub Actions CI pipeline and updated `DEPLOY.md` to map out the required environment architecture (Connection pooling, Edge variables) necessary for Vercel.
+
 ## Structural Shifts & System Memories
 - Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
 - We opted for heavily typed Prisma enums (`UserRole`, `ProductType`, `DeliveryType`, `PostType`) to ensure robust schema relationships for the multi-tier user system.
@@ -32,4 +34,4 @@ To wrap up the architecture, we implemented Playwright E2E browser tests and hoo
 - Artist/Business profiles are heavily nested Next.js Server Components (`src/app/artist/[id]`) that perform single rapid Prisma lookups to populate the page for maximum SEO impact, whereas the Dashboard utilizes heavy client-side states.
 
 ## Next Steps for Successor Model
-- Consider deploying to Vercel.
+- Proceed with Vercel deployment. No pending structural tasks remain.

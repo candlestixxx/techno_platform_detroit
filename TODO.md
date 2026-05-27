@@ -1,4 +1,4 @@
 # TODO.md
 
 Granular immediate tasks:
-- Deploy to Vercel and verify PostgreSQL edge connection pooling.
+- None. Repository is fully scaffolded and prepared for live deployment.

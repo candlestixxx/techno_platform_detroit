@@ -1,6 +1,10 @@
 # CHANGELOG.md
 
-## v0.7.0 (Current)
+## v0.8.0 (Current)
+- Prepared repository for Vercel production deployment (`DEPLOY.md`).
+- Implemented GitHub Actions CI workflow to run tests, linting, and builds automatically.
+
+## v0.7.0
 - Configured Edge Caching Headers (`Cache-Control`) on aggregate API endpoints to prevent rate limit blocks.
 - Setup Playwright End-to-End browser UI testing suite.
 
