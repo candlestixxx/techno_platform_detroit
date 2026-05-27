@@ -26,6 +26,8 @@ model User {
   sessions Session[]
   products Product[]
   posts    Post[]
+  topics   ForumTopic[]
+  replies  ForumReply[]
 }
 
 model Account {
@@ -128,4 +130,26 @@ enum PostType {
   EVENT_ANNOUNCEMENT
   BUSINESS_SPOTLIGHT
   GENERAL
+}
+
+model ForumTopic {
+  id        String       @id @default(uuid())
+  title     String
+  content   String
+  authorId  String
+  author    User         @relation(fields: [authorId], references: [id])
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  replies   ForumReply[]
+}
+
+model ForumReply {
+  id        String     @id @default(uuid())
+  content   String
+  authorId  String
+  author    User       @relation(fields: [authorId], references: [id])
+  topicId   String
+  topic     ForumTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }

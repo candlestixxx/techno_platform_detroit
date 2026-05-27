@@ -44,6 +44,12 @@ export default function Home() {
             Explore Map
           </button>
           <a
+            href="/forum"
+            className="font-bold uppercase tracking-wider text-sm px-4 py-2 rounded text-gray-300 hover:bg-gray-800 transition-colors border border-transparent"
+          >
+            Forum
+          </a>
+          <a
             href="/marketplace"
             className="font-bold uppercase tracking-wider text-sm px-4 py-2 rounded text-emerald-400 hover:bg-emerald-900/30 transition-colors border border-emerald-800/50"
           >
