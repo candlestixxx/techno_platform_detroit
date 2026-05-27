@@ -10,11 +10,22 @@ const UndergroundMap = dynamic(() => import("@/components/map/UndergroundMap"), 
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"feed" | "map">("feed");
+  const [liveEvents, setLiveEvents] = useState<any[]>([]);
 
-  // Mock data for the map
-  const mockEvents = [
-    { type: "event", title: "Movement Pre-Party", venue: "TV Lounge", lineup: ["DJ Minx", "Carl Craig"] }
-  ];
+  React.useEffect(() => {
+    fetch("/api/events")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          // Format for the map
+          const formattedEvents = data.map((e) => ({ ...e, type: "event" }));
+          setLiveEvents(formattedEvents);
+        }
+      })
+      .catch((err) => console.error("Error fetching live events:", err));
+  }, []);
+
+  // Mock businesses for scaffolding
   const mockBusinesses = [
     { type: "business", title: "Spot Lite Detroit", venue: "Spot Lite", offer: "15% off", code: "UNDERGROUND15" }
   ];
@@ -68,7 +79,7 @@ export default function Home() {
 
         {activeTab === "map" && (
           <div className="absolute inset-0">
-            <UndergroundMap events={mockEvents} businesses={mockBusinesses} />
+            <UndergroundMap events={liveEvents.length > 0 ? liveEvents : []} businesses={mockBusinesses} />
           </div>
         )}
       </main>

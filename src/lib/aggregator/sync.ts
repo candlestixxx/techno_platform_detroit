@@ -1,4 +1,5 @@
 import { scrapeLiveMovementParties, scrapeLiveTectroit, fetchLiveResidentAdvisorEvents, AggregatedEvent } from "./live-scrapers";
+import { prisma } from "@/lib/prisma";
 
 export async function syncEvents() {
   console.log("Starting event aggregation sync...");
@@ -26,11 +27,30 @@ export async function syncEvents() {
     console.error("Error fetching RA events:", error);
   }
 
-  console.log(`Successfully synced ${allEvents.length} events.`);
+  console.log(`Successfully synced ${allEvents.length} events. Attempting database injection...`);
 
-  // In a real implementation, you would save these to the database using Prisma here.
-  // Example:
-  // await prisma.event.createMany({ data: allEvents });
+  // We are using a basic create loop for the scaffold. In production, an upsert based on a unique hash (like Title+Date) is preferred.
+  let insertedCount = 0;
+  for (const event of allEvents) {
+    try {
+      await prisma.event.create({
+        data: {
+          title: event.title,
+          venue: event.venue,
+          date: event.date,
+          lineup: event.lineup,
+          source: event.source,
+          isAfterparty: event.isAfterparty,
+          coordinates: event.coordinates ? event.coordinates : undefined,
+          originalLink: event.originalLink,
+        },
+      });
+      insertedCount++;
+    } catch (e) {
+      // Ignore duplicates or specific Prisma insertion errors during sync loop
+    }
+  }
 
+  console.log(`Successfully inserted ${insertedCount} new events into the database.`);
   return allEvents;
 }
