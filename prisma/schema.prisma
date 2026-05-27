@@ -22,12 +22,13 @@ model User {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
-  accounts Account[]
-  sessions Session[]
-  products Product[]
-  posts    Post[]
-  topics   ForumTopic[]
-  replies  ForumReply[]
+  accounts      Account[]
+  sessions      Session[]
+  products      Product[]
+  posts         Post[]
+  topics        ForumTopic[]
+  replies       ForumReply[]
+  eventMessages EventMessage[]
 }
 
 model Account {
@@ -112,6 +113,18 @@ model Event {
   image        String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  chatMessages EventMessage[]
+}
+
+model EventMessage {
+  id        String   @id @default(uuid())
+  content   String
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
 model Post {
