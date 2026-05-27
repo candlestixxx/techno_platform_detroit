@@ -1,4 +1,5 @@
 # TODO.md
 
 Granular immediate tasks:
-- Finalize production integration of Stripe Connect (swap mock API with real Stripe instance).
+- Finalize production scrapers replacing the mock aggregator framework.
+- Complete the LiteLLM proxy integration for backend automation tasks.

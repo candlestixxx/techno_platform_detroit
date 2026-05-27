@@ -11,6 +11,8 @@ We addressed all remaining UX nitpicks, wired up a Stripe Checkout mock API (`sr
 
 Finally, we enhanced the authentication flow to include `bcrypt` password hashing for the credentials provider and built a fully functional frontend Login modal interface, which is now wired to the Next.js layout and headers. We then added `GoogleProvider` and `GithubProvider` for OAuth based sign-ins and built those corresponding buttons into the UI.
 
+In the most recent iteration, we implemented full Stripe Connect onboarding logic by expanding the database schema and adding a new route (`/api/stripe/onboard`). We also finalized the Marketplace checkout API to dynamically split platform fees and deposit transaction amounts securely into verified connected accounts using `transfer_data`.
+
 ## Structural Shifts & System Memories
 - Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
 - We opted for heavily typed Prisma enums (`UserRole`, `ProductType`, `DeliveryType`, `PostType`) to ensure robust schema relationships for the multi-tier user system.
@@ -18,9 +20,10 @@ Finally, we enhanced the authentication flow to include `bcrypt` password hashin
 - The social feed utilizes the `IntersectionObserver` API for smooth, zero-jitter infinite scrolling instead of basic pagination.
 - Scrapers (`src/lib/aggregator/live-scrapers.ts`) actively attempt to parse DOM nodes from target URLs but use `try/catch` to gracefully fall back to mock data if blocked by cloudflare/rate limiters.
 - Python script `scripts/litellm_setup.py` added to establish a top-5 list of free models via OpenRouter for LLM routing configuration.
-- Authentication relies on `next-auth` JWT sessions paired with Prisma. Passwords are mathematically hashed using `bcrypt` before database storage.
-- Marketplace checkout uses a dynamic modal, sorting flows automatically by physical merchandise vs digital coupons vs audio downloads.
+- Authentication relies on `next-auth` JWT sessions paired with Prisma. Passwords are mathematically hashed using `bcrypt` before database storage. Support is active for OAuth (Google, GitHub) alongside credentials.
+- Marketplace checkout uses a dynamic modal, sorting flows automatically by physical merchandise vs digital coupons vs audio downloads. Real Stripe sessions dynamically take 5% platform fees and transfer the balance to connected `stripeAccountId`s.
 
 ## Next Steps for Successor Model
 - Read `TODO.md` and `ROADMAP.md` to resume work seamlessly.
-- Finalize Stripe Connect production implementation.
+- Finalize production scrapers replacing the mock aggregator framework entirely.
+- Implement the LiteLLM backend automation integrations.

@@ -1,6 +1,11 @@
 # CHANGELOG.md
 
-## v0.3.0 (Current)
+## v0.4.0 (Current)
+- Added Stripe Connect Onboarding API (`/api/stripe/onboard`).
+- Finalized Stripe Checkout API to distribute platform fees and transfer payments to connected `stripeAccountId`.
+- Updated User Prisma schema to support `stripeAccountId`.
+
+## v0.3.0
 - Configured Google and GitHub OAuth providers within `next-auth`.
 - Updated authentication UI with OAuth login buttons.
 

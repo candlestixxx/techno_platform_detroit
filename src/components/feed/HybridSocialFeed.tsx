@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Music, MapPin, Building2, Store } from "lucide-react";
+import { Music, MapPin, Store } from "lucide-react";
 
 // Mock Data Types
 type PostType = "ARTIST_POST" | "EVENT_UPDATE" | "BUSINESS_SPOTLIGHT";
