@@ -4,9 +4,11 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import HeaderAuth from "@/components/layout/HeaderAuth";
 
-export default async function ArtistProfilePage({ params }: { params: { id: string } }) {
+export default async function ArtistProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
   const user = await prisma.user.findUnique({
-    where: { id: params.id },
+    where: { id: id },
     include: {
       posts: {
         orderBy: { createdAt: "desc" },
