@@ -1,5 +1,5 @@
 # TODO.md
 
 Granular immediate tasks:
-- Integrate real user authentication for Artist and Business profiles (NextAuth.js).
-- Integrate Live Resident Advisor (RA) GraphQL endpoint to replace mocked RA scraper.
+- Expand Stripe Connect capabilities for marketplace items.
+- Write Jest integration tests for NextAuth credentials flow.

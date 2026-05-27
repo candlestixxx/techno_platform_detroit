@@ -1,5 +1,5 @@
-import { scrapeLiveMovementParties, scrapeLiveTectroit } from "./live-scrapers";
-import { fetchResidentAdvisorEvents, AggregatedEvent } from "./mock-scrapers";
+import { scrapeLiveMovementParties, scrapeLiveTectroit, fetchLiveResidentAdvisorEvents } from "./live-scrapers";
+import { AggregatedEvent } from "./mock-scrapers";
 
 export async function syncEvents() {
   console.log("Starting event aggregation sync...");
@@ -21,7 +21,7 @@ export async function syncEvents() {
   }
 
   try {
-    const raEvents = await fetchResidentAdvisorEvents();
+    const raEvents = await fetchLiveResidentAdvisorEvents();
     allEvents.push(...raEvents);
   } catch (error) {
     console.error("Error fetching RA events:", error);

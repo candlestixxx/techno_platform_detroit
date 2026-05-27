@@ -11,16 +11,19 @@ Finally, we addressed all remaining UX nitpicks:
 1. Fixed `window is not defined` SSR crashes by dynamically importing the Map component.
 2. Updated Mapbox logic to actively render pins/markers when the component mounts.
 3. Implemented a full Marketplace Checkout form, adapting dynamically if the item requires shipping, or if it's a digital coupon/audio download.
+4. Installed NextAuth.js (`next-auth`) and `@next-auth/prisma-adapter` and created the `[...nextauth]/route.ts` with the Credentials provider configuration mapped to Prisma.
+5. Replaced the mocked Resident Advisor event fetcher with a GraphQL payload query hitting `https://ra.co/graphql`.
 
 ## Structural Shifts & System Memories
 - Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
 - We opted for heavily typed Prisma enums (`UserRole`, `ProductType`, `DeliveryType`, `PostType`) to ensure robust schema relationships for the multi-tier user system.
-- Front-end mapping relies on `mapbox-gl` with a dark industrial styling to match the techno-flyer aesthetic requested.
+- Front-end mapping relies on `mapbox-gl` with a dark industrial styling to match the techno-flyer aesthetic requested. Map is dynamically loaded via `next/dynamic` with SSR disabled.
 - The social feed utilizes the `IntersectionObserver` API for smooth, zero-jitter infinite scrolling instead of basic pagination.
 - Scrapers (`src/lib/aggregator/live-scrapers.ts`) actively attempt to parse DOM nodes from target URLs but use `try/catch` to gracefully fall back to mock data if blocked by cloudflare/rate limiters.
 - Python script `scripts/litellm_setup.py` added to establish a top-5 list of free models via OpenRouter for LLM routing configuration.
+- Authentication relies on `next-auth` JWT sessions paired with Prisma.
 
 ## Next Steps for Successor Model
 - Read `TODO.md` and `ROADMAP.md` to resume work seamlessly.
-- Prioritize implementing a Live Resident Advisor (RA) GraphQL or API endpoint to complete the scraper engine.
-- Integrate NextAuth.js to handle authenticated actions.
+- Expand Stripe Connect capabilities for marketplace items.
+- Write Jest integration tests for NextAuth credentials flow.

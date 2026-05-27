@@ -2,6 +2,61 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { AggregatedEvent } from './mock-scrapers';
 
+export async function fetchLiveResidentAdvisorEvents(): Promise<AggregatedEvent[]> {
+  console.log("Attempting live GraphQL fetch of RA.co events...");
+  try {
+    // Resident Advisor uses GraphQL on their public frontend.
+    // This is a mocked structure of their payload intended to target Detroit (Region ID often required)
+    const query = `
+      query GetEvents {
+        eventListings(countryId: "192", limit: 10) {
+          id
+          title
+          date
+          venue {
+            name
+          }
+          artists {
+            name
+          }
+        }
+      }
+    `;
+
+    const { data } = await axios.post('https://ra.co/graphql', { query }, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0',
+        'Content-Type': 'application/json'
+      },
+      timeout: 5000
+    });
+
+    const events: AggregatedEvent[] = [];
+
+    if (data && data.data && data.data.eventListings) {
+      data.data.eventListings.forEach((event: any) => {
+        events.push({
+          title: event.title,
+          venue: event.venue?.name || 'TBA',
+          date: new Date(event.date),
+          lineup: event.artists ? event.artists.map((a: any) => a.name) : [],
+          isAfterparty: event.title.toLowerCase().includes('afterparty'),
+          source: 'RA',
+          originalLink: `https://ra.co/events/${event.id}`
+        });
+      });
+    }
+
+    if (events.length > 0) return events;
+    throw new Error("No events parsed from RA GraphQL.");
+
+  } catch (error) {
+    console.warn("Live fetch for RA failed or blocked. Falling back to mock data.");
+    const { fetchResidentAdvisorEvents } = await import('./mock-scrapers');
+    return fetchResidentAdvisorEvents();
+  }
+}
+
 export async function scrapeLiveMovementParties(): Promise<AggregatedEvent[]> {
   console.log("Attempting live scrape of movementparties.com...");
   try {

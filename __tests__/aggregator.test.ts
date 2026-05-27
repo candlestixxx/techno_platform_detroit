@@ -10,15 +10,7 @@ jest.mock("../src/lib/aggregator/live-scrapers", () => {
     ...originalModule,
     scrapeLiveMovementParties: jest.fn(originalModule.scrapeLiveMovementParties),
     scrapeLiveTectroit: jest.fn(originalModule.scrapeLiveTectroit),
-  };
-});
-
-jest.mock("../src/lib/aggregator/mock-scrapers", () => {
-  const originalModule = jest.requireActual("../src/lib/aggregator/mock-scrapers");
-  return {
-    __esModule: true,
-    ...originalModule,
-    fetchResidentAdvisorEvents: jest.fn(originalModule.fetchResidentAdvisorEvents),
+    fetchLiveResidentAdvisorEvents: jest.fn(originalModule.fetchLiveResidentAdvisorEvents),
   };
 });
 
@@ -31,13 +23,13 @@ describe("Event Aggregator Sync", () => {
     // Force mock behavior to prevent actual network calls during test
     (liveScrapers.scrapeLiveMovementParties as jest.Mock).mockResolvedValueOnce([{ source: "Movement" }]);
     (liveScrapers.scrapeLiveTectroit as jest.Mock).mockResolvedValueOnce([{ source: "Tectroit" }]);
-    (mockScrapers.fetchResidentAdvisorEvents as jest.Mock).mockResolvedValueOnce([{ source: "RA" }]);
+    (liveScrapers.fetchLiveResidentAdvisorEvents as jest.Mock).mockResolvedValueOnce([{ source: "RA" }]);
 
     const events = await syncEvents();
 
     expect(liveScrapers.scrapeLiveMovementParties).toHaveBeenCalled();
     expect(liveScrapers.scrapeLiveTectroit).toHaveBeenCalled();
-    expect(mockScrapers.fetchResidentAdvisorEvents).toHaveBeenCalled();
+    expect(liveScrapers.fetchLiveResidentAdvisorEvents).toHaveBeenCalled();
 
     expect(events.length).toBe(3);
     expect(events.some((e) => e.source === "Movement")).toBe(true);
@@ -49,7 +41,7 @@ describe("Event Aggregator Sync", () => {
     // Force one scraper to fail entirely
     (liveScrapers.scrapeLiveMovementParties as jest.Mock).mockResolvedValueOnce([{ source: "Movement" }]);
     (liveScrapers.scrapeLiveTectroit as jest.Mock).mockRejectedValueOnce(new Error("Network error"));
-    (mockScrapers.fetchResidentAdvisorEvents as jest.Mock).mockResolvedValueOnce([{ source: "RA" }]);
+    (liveScrapers.fetchLiveResidentAdvisorEvents as jest.Mock).mockResolvedValueOnce([{ source: "RA" }]);
 
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
@@ -57,7 +49,7 @@ describe("Event Aggregator Sync", () => {
 
     expect(liveScrapers.scrapeLiveMovementParties).toHaveBeenCalled();
     expect(liveScrapers.scrapeLiveTectroit).toHaveBeenCalled();
-    expect(mockScrapers.fetchResidentAdvisorEvents).toHaveBeenCalled();
+    expect(liveScrapers.fetchLiveResidentAdvisorEvents).toHaveBeenCalled();
 
     // The other two should still succeed
     expect(events.length).toBe(2);
