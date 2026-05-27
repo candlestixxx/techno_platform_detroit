@@ -7,6 +7,11 @@ We followed up by wiring the `HybridSocialFeed` and `UndergroundMap` components 
 
 Most recently, we successfully refactored the data ingestion pipeline, installing `axios` and `cheerio` to create live DOM scrapers for Movement Parties and Tectroit, which gracefully fallback to mocked logic if rate-limited. We also improved the Mapbox drawer popup specifically tailored for mobile user experiences (sliding drawers, drag handles).
 
+Finally, we addressed all remaining UX nitpicks:
+1. Fixed `window is not defined` SSR crashes by dynamically importing the Map component.
+2. Updated Mapbox logic to actively render pins/markers when the component mounts.
+3. Implemented a full Marketplace Checkout form, adapting dynamically if the item requires shipping, or if it's a digital coupon/audio download.
+
 ## Structural Shifts & System Memories
 - Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
 - We opted for heavily typed Prisma enums (`UserRole`, `ProductType`, `DeliveryType`, `PostType`) to ensure robust schema relationships for the multi-tier user system.
@@ -18,4 +23,4 @@ Most recently, we successfully refactored the data ingestion pipeline, installin
 ## Next Steps for Successor Model
 - Read `TODO.md` and `ROADMAP.md` to resume work seamlessly.
 - Prioritize implementing a Live Resident Advisor (RA) GraphQL or API endpoint to complete the scraper engine.
-- Expand Stripe Connect capabilities for marketplace items.
+- Integrate NextAuth.js to handle authenticated actions.

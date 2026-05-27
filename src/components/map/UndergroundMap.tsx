@@ -37,10 +37,28 @@ export default function UndergroundMap({ events, businesses }: MapProps) {
     });
 
     map.current.on("load", () => {
-      // Setup map layers and sources here once loaded
-      // This is a simplified version, in reality you'd add GeoJSON sources and layers
+      // Adding markers to the map once loaded
+      const addMarker = (item: any, lngLat: [number, number], color: string) => {
+        if (!map.current) return;
+        const marker = new mapboxgl.Marker({ color })
+          .setLngLat(lngLat)
+          .addTo(map.current);
+
+        marker.getElement().addEventListener("click", () => {
+          setSelectedItem(item);
+        });
+      };
+
+      // Add dummy coordinates for the mocked items near Detroit
+      events.forEach((event, idx) => {
+        addMarker(event, [lng + (idx * 0.01), lat + (idx * 0.01)], "#9333EA"); // Purple for events
+      });
+
+      businesses.forEach((biz, idx) => {
+        addMarker(biz, [lng - (idx * 0.01) - 0.01, lat - (idx * 0.01) - 0.01], "#10B981"); // Emerald for business
+      });
     });
-  });
+  }, [events, businesses, lng, lat, zoom]); // Added dependency array to prevent infinite re-renders
 
   const toggleGenreFilter = (genre: keyof typeof filters.genres) => {
     setFilters((prev) => ({

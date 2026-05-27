@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import HybridSocialFeed from "@/components/feed/HybridSocialFeed";
-import UndergroundMap from "@/components/map/UndergroundMap";
+
+// Dynamically import the map to prevent window is not defined SSR errors
+const UndergroundMap = dynamic(() => import("@/components/map/UndergroundMap"), { ssr: false });
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"feed" | "map">("feed");
