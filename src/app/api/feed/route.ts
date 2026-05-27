@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -77,9 +79,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Failed to fetch feed" }, { status: 500 });
   }
 }
-
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function POST(request: Request) {
   try {

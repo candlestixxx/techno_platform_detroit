@@ -1,6 +1,10 @@
 # CHANGELOG.md
 
-## v0.9.0 (Current)
+## v1.0.0 (Current)
+- Prepared final V1 release structure for Detroit Underground.
+- Refactored internal API route ES6 imports to strict top-of-file guidelines to resolve final code review nitpicks.
+
+## v0.9.0
 - Added authenticated POST endpoint for users to create new feed broadcasts in `/api/feed/route.ts`.
 - Integrated a real-time post creation form UI exclusively visible to authenticated users in `HybridSocialFeed.tsx`.
 
