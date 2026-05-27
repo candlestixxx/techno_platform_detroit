@@ -1,6 +1,17 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { AggregatedEvent } from './mock-scrapers';
+
+export interface AggregatedEvent {
+  title: string;
+  date: Date;
+  venue: string;
+  lineup: string[];
+  isAfterparty: boolean;
+  coordinates?: { lat: number; lng: number };
+  source: string;
+  originalLink?: string;
+  image?: string;
+}
 
 export async function fetchLiveResidentAdvisorEvents(): Promise<AggregatedEvent[]> {
   console.log("Attempting live GraphQL fetch of RA.co events...");
@@ -51,9 +62,8 @@ export async function fetchLiveResidentAdvisorEvents(): Promise<AggregatedEvent[
     throw new Error("No events parsed from RA GraphQL.");
 
   } catch (error) {
-    console.warn("Live fetch for RA failed or blocked. Falling back to mock data.");
-    const { fetchResidentAdvisorEvents } = await import('./mock-scrapers');
-    return fetchResidentAdvisorEvents();
+    console.error("Live fetch for RA failed or blocked:", error);
+    return []; // Production fail-safe: return empty array instead of mock data
   }
 }
 
@@ -96,9 +106,8 @@ export async function scrapeLiveMovementParties(): Promise<AggregatedEvent[]> {
     throw new Error("No events parsed from HTML.");
 
   } catch (error) {
-    console.warn("Live scrape for Movement Parties failed or blocked. Falling back to mock data.");
-    const { scrapeMovementParties } = await import('./mock-scrapers');
-    return scrapeMovementParties();
+    console.error("Live scrape for Movement Parties failed or blocked:", error);
+    return []; // Production fail-safe: return empty array instead of mock data
   }
 }
 
@@ -133,8 +142,7 @@ export async function scrapeLiveTectroit(): Promise<AggregatedEvent[]> {
     throw new Error("No events parsed from HTML.");
 
   } catch (error) {
-    console.warn("Live scrape for Tectroit failed or blocked. Falling back to mock data.");
-    const { scrapeTectroit } = await import('./mock-scrapers');
-    return scrapeTectroit();
+    console.error("Live scrape for Tectroit failed or blocked:", error);
+    return []; // Production fail-safe: return empty array instead of mock data
   }
 }

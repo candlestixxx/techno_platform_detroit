@@ -1,6 +1,10 @@
 # CHANGELOG.md
 
-## v0.4.0 (Current)
+## v0.5.0 (Current)
+- Removed fallback mock scrapers, fully relying on `axios`/`cheerio` live DOM parsing for production event aggregators.
+- Implemented `/api/llm` API route proxy intended to interface with the locally configured `litellm` python instance for data summarizations and venue analytics.
+
+## v0.4.0
 - Added Stripe Connect Onboarding API (`/api/stripe/onboard`).
 - Finalized Stripe Checkout API to distribute platform fees and transfer payments to connected `stripeAccountId`.
 - Updated User Prisma schema to support `stripeAccountId`.

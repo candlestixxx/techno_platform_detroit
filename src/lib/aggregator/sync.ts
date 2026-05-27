@@ -1,5 +1,4 @@
-import { scrapeLiveMovementParties, scrapeLiveTectroit, fetchLiveResidentAdvisorEvents } from "./live-scrapers";
-import { AggregatedEvent } from "./mock-scrapers";
+import { scrapeLiveMovementParties, scrapeLiveTectroit, fetchLiveResidentAdvisorEvents, AggregatedEvent } from "./live-scrapers";
 
 export async function syncEvents() {
   console.log("Starting event aggregation sync...");

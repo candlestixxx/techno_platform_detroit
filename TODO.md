@@ -1,5 +1,5 @@
 # TODO.md
 
 Granular immediate tasks:
-- Finalize production scrapers replacing the mock aggregator framework.
-- Complete the LiteLLM proxy integration for backend automation tasks.
+- Enhance Mapbox layer styling for precise coordinate dropping instead of mathematical offsets.
+- Setup specific Next.js page overlays for independent Artist Profiles.

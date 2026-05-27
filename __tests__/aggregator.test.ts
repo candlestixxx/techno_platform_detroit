@@ -1,6 +1,5 @@
 import { syncEvents } from "../src/lib/aggregator/sync";
 import * as liveScrapers from "../src/lib/aggregator/live-scrapers";
-import * as mockScrapers from "../src/lib/aggregator/mock-scrapers";
 
 // Mock the scrapers
 jest.mock("../src/lib/aggregator/live-scrapers", () => {
