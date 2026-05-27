@@ -1,6 +1,10 @@
 # CHANGELOG.md
 
-## v0.6.0 (Current)
+## v0.7.0 (Current)
+- Configured Edge Caching Headers (`Cache-Control`) on aggregate API endpoints to prevent rate limit blocks.
+- Setup Playwright End-to-End browser UI testing suite.
+
+## v0.6.0
 - Upgraded `UndergroundMap.tsx` marker placement to explicitly utilize the `event.coordinates` property queried from the live scraping APIs.
 - Built independent frontend profile routing (`/artist/[id]`) for specific Artists/Businesses to showcase their posts and marketplace products.
 

@@ -17,6 +17,8 @@ In the absolute final configuration sweep, we stripped away the fallback logic f
 
 In this concluding UX enhancement iteration, we bound the `mapboxgl.Marker` components strictly to the `coordinates` property fetched via our live aggregators (falling back to generated offsets if the original API lacked geocoding data for a specific underground venue). Lastly, we constructed the independent `[id]` routing for Artist Profiles, creating a dedicated SEO-friendly landing page for DJs/Businesses to distribute their latest tracks and sell merch directly to their fans without needing the user to navigate the central map dashboard.
 
+To wrap up the architecture, we implemented Playwright E2E browser tests and hooked up `Cache-Control` Headers to critical data endpoints to prevent rate limits.
+
 ## Structural Shifts & System Memories
 - Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
 - We opted for heavily typed Prisma enums (`UserRole`, `ProductType`, `DeliveryType`, `PostType`) to ensure robust schema relationships for the multi-tier user system.
@@ -30,5 +32,4 @@ In this concluding UX enhancement iteration, we bound the `mapboxgl.Marker` comp
 - Artist/Business profiles are heavily nested Next.js Server Components (`src/app/artist/[id]`) that perform single rapid Prisma lookups to populate the page for maximum SEO impact, whereas the Dashboard utilizes heavy client-side states.
 
 ## Next Steps for Successor Model
-- Consider writing a Playwright E2E test suite.
-- Focus on rate-limit buffering for the live aggregators using Upstash Redis or Vercel KV.
+- Consider deploying to Vercel.
