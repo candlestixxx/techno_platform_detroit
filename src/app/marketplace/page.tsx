@@ -7,6 +7,7 @@ export default function MarketplacePage() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [checkoutProduct, setCheckoutProduct] = useState<any | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
     // Fetch mock products from the API route we created
@@ -129,7 +130,33 @@ export default function MarketplacePage() {
 
               {checkoutProduct.type === "PHYSICAL_MERCH" || checkoutProduct.type === "LIMITED_VINYL" ? (
                 // Physical Shipping Form
-                <form className="flex flex-col gap-4">
+                <form
+                  className="flex flex-col gap-4"
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    setCheckoutLoading(true);
+                    try {
+                      const res = await fetch("/api/checkout", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          productId: checkoutProduct.id,
+                          title: checkoutProduct.title,
+                          price: checkoutProduct.price,
+                        }),
+                      });
+                      const data = await res.json();
+                      if (data.url) {
+                        alert("Mocking redirect to: " + data.url);
+                        setCheckoutProduct(null);
+                      }
+                    } catch (error) {
+                      console.error("Checkout failed:", error);
+                    } finally {
+                      setCheckoutLoading(false);
+                    }
+                  }}
+                >
                   <div className="text-xs uppercase tracking-widest text-gray-500 font-bold">Shipping Details</div>
                   <div className="grid grid-cols-2 gap-4">
                     <input type="text" placeholder="First Name" className="bg-black border border-gray-800 rounded p-2 text-sm text-white focus:border-purple-500 outline-none" required />
@@ -140,8 +167,8 @@ export default function MarketplacePage() {
                     <input type="text" placeholder="City" className="col-span-2 bg-black border border-gray-800 rounded p-2 text-sm text-white focus:border-purple-500 outline-none" required />
                     <input type="text" placeholder="Zip" className="bg-black border border-gray-800 rounded p-2 text-sm text-white focus:border-purple-500 outline-none" required />
                   </div>
-                  <button type="button" onClick={() => { alert("Redirecting to Stripe..."); setCheckoutProduct(null); }} className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold uppercase tracking-widest py-3 rounded mt-4 transition-colors">
-                    Continue to Payment
+                  <button disabled={checkoutLoading} type="submit" className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold uppercase tracking-widest py-3 rounded mt-4 transition-colors disabled:opacity-50">
+                    {checkoutLoading ? "Processing..." : "Continue to Payment"}
                   </button>
                 </form>
               ) : checkoutProduct.type === "LOCAL_PROMO_COUPON" ? (
@@ -161,8 +188,35 @@ export default function MarketplacePage() {
                   <p className="text-gray-400 text-sm mb-6">
                     You are purchasing a digital audio file. A secure download link will be emailed to you after payment.
                   </p>
-                  <button type="button" onClick={() => { alert("Redirecting to Stripe..."); setCheckoutProduct(null); }} className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold uppercase tracking-widest py-3 rounded transition-colors">
-                    Continue to Payment
+                  <button
+                    type="button"
+                    disabled={checkoutLoading}
+                    onClick={async () => {
+                      setCheckoutLoading(true);
+                      try {
+                        const res = await fetch("/api/checkout", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            productId: checkoutProduct.id,
+                            title: checkoutProduct.title,
+                            price: checkoutProduct.price,
+                          }),
+                        });
+                        const data = await res.json();
+                        if (data.url) {
+                          alert("Mocking redirect to: " + data.url);
+                          setCheckoutProduct(null);
+                        }
+                      } catch (error) {
+                        console.error("Checkout failed:", error);
+                      } finally {
+                        setCheckoutLoading(false);
+                      }
+                    }}
+                    className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold uppercase tracking-widest py-3 rounded transition-colors disabled:opacity-50"
+                  >
+                    {checkoutLoading ? "Processing..." : "Continue to Payment"}
                   </button>
                 </div>
               )}

@@ -7,12 +7,7 @@ We followed up by wiring the `HybridSocialFeed` and `UndergroundMap` components 
 
 Most recently, we successfully refactored the data ingestion pipeline, installing `axios` and `cheerio` to create live DOM scrapers for Movement Parties and Tectroit, which gracefully fallback to mocked logic if rate-limited. We also improved the Mapbox drawer popup specifically tailored for mobile user experiences (sliding drawers, drag handles).
 
-Finally, we addressed all remaining UX nitpicks:
-1. Fixed `window is not defined` SSR crashes by dynamically importing the Map component.
-2. Updated Mapbox logic to actively render pins/markers when the component mounts.
-3. Implemented a full Marketplace Checkout form, adapting dynamically if the item requires shipping, or if it's a digital coupon/audio download.
-4. Installed NextAuth.js (`next-auth`) and `@next-auth/prisma-adapter` and created the `[...nextauth]/route.ts` with the Credentials provider configuration mapped to Prisma.
-5. Replaced the mocked Resident Advisor event fetcher with a GraphQL payload query hitting `https://ra.co/graphql`.
+We addressed all remaining UX nitpicks, wired up a Stripe Checkout mock API (`src/app/api/checkout/route.ts`), and implemented `next-auth` JWT architecture combined with the `PrismaAdapter`. We also wrote the corresponding Jest tests for the authentication flows.
 
 ## Structural Shifts & System Memories
 - Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
@@ -22,8 +17,9 @@ Finally, we addressed all remaining UX nitpicks:
 - Scrapers (`src/lib/aggregator/live-scrapers.ts`) actively attempt to parse DOM nodes from target URLs but use `try/catch` to gracefully fall back to mock data if blocked by cloudflare/rate limiters.
 - Python script `scripts/litellm_setup.py` added to establish a top-5 list of free models via OpenRouter for LLM routing configuration.
 - Authentication relies on `next-auth` JWT sessions paired with Prisma.
+- Marketplace checkout uses a dynamic modal, sorting flows automatically by physical merchandise vs digital coupons vs audio downloads.
 
 ## Next Steps for Successor Model
 - Read `TODO.md` and `ROADMAP.md` to resume work seamlessly.
-- Expand Stripe Connect capabilities for marketplace items.
-- Write Jest integration tests for NextAuth credentials flow.
+- Finalize Stripe Connect production implementation.
+- Hook up UI login buttons for the OAuth / Credentials flow.

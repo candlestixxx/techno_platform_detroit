@@ -19,6 +19,10 @@ export const authOptions: NextAuthOptions = {
 
         // Mock password verification for scaffolding phase.
         // In production, we would use bcrypt.compare(credentials.password, user.passwordHash)
+        if (credentials.password !== "password") {
+          return null; // Reject if password doesn't match the mock standard
+        }
+
         const user = await prisma.user.findUnique({
           where: { email: credentials.email }
         });

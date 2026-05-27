@@ -49,12 +49,21 @@ export async function GET(request: Request) {
   }
 }
 
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]/route";
+
 export async function POST(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user || !(session.user as any).id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
 
     // Validate required fields
-    if (!body.title || !body.description || body.price === undefined || !body.type || !body.sellerId) {
+    if (!body.title || !body.description || body.price === undefined || !body.type) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -64,7 +73,7 @@ export async function POST(request: Request) {
         description: body.description,
         price: body.price,
         type: body.type,
-        sellerId: body.sellerId,
+        sellerId: (session.user as any).id, // Force sellerId to be the authenticated user
         delivery: body.delivery || "SHIPPED",
         qrCode: body.qrCode,
       },
