@@ -3,6 +3,8 @@
 ## Session Summary
 This session successfully implemented the initial scaffolding for the "Detroit Underground Platform", fulfilling the comprehensive set of prompt instructions. We established the `AGENTS.md` context, created the Next.js foundation, built the `prisma.schema`, and developed core backend/frontend modules (Event Aggregator, Mapbox GL Interactive Map, Marketplace API/UI, and Hybrid Social Feed). We also generated the requested global core documentation and a python script to configure `litellm` with the best available free models.
 
+We followed up by wiring the `HybridSocialFeed` and `UndergroundMap` components into the main application UI at `src/app/page.tsx`. Additionally, we replaced the mocked marketplace and feed API route with real Prisma database calls, and added proper test suites to test the REST integrations.
+
 ## Structural Shifts & System Memories
 - Next.js 14 App Router and Prisma form the primary backbone.
 - We opted for heavily typed Prisma enums (`UserRole`, `ProductType`, `DeliveryType`, `PostType`) to ensure robust schema relationships for the multi-tier user system.
@@ -15,3 +17,4 @@ This session successfully implemented the initial scaffolding for the "Detroit U
 - Read `TODO.md` and `ROADMAP.md` to resume work seamlessly.
 - Prioritize replacing mock scrapers in `src/lib/aggregator` with live scraping logic (Puppeteer or Axios/Cheerio).
 - Expand Stripe Connect capabilities for marketplace items.
+- Focus on mobile styling for MapBox components.

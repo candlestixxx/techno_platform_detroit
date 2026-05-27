@@ -15,41 +15,28 @@ interface Post {
   metadata?: any;
 }
 
-// Mock API Call
-const fetchFeedPage = async (page: number): Promise<Post[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const newPosts: Post[] = [
-        {
-          id: `artist-${page}`,
-          type: "ARTIST_POST",
-          author: "DJ Minx",
-          timestamp: "2 hours ago",
-          content: "Just dropped a new mix on SoundCloud. Check it out!",
-          metadata: {
-            embedUrl: "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789",
-          },
-        },
-        {
-          id: `event-${page}`,
-          type: "EVENT_UPDATE",
-          author: "RA.co",
-          timestamp: "4 hours ago",
-          content: "Just Announced: TV Lounge Weekend Lineup.",
-          metadata: { venue: "TV Lounge", source: "Resident Advisor" },
-        },
-        {
-          id: `business-${page}`,
-          type: "BUSINESS_SPOTLIGHT",
-          author: "Spot Lite Detroit",
-          timestamp: "1 day ago",
-          content: "Come grab a coffee and browse some records. 15% off if you show this post today!",
-          metadata: { offerCode: "UNDERGROUND15" },
-        },
-      ];
-      resolve(newPosts);
-    }, 800);
-  });
+// Fetch API Call to Prisma Route
+const fetchFeedPage = async (page: number): Promise<{ posts: Post[]; hasMore: boolean }> => {
+  try {
+    const res = await fetch(`/api/feed?page=${page}`);
+    if (!res.ok) throw new Error("Failed to fetch feed");
+    const data = await res.json();
+
+    // Map Prisma models to frontend expected format
+    const formattedPosts: Post[] = data.posts.map((post: any) => ({
+      id: post.id,
+      type: post.type === "ARTIST_UPDATE" ? "ARTIST_POST" : post.type === "EVENT_ANNOUNCEMENT" ? "EVENT_UPDATE" : "BUSINESS_SPOTLIGHT",
+      author: post.author?.name || "Unknown",
+      timestamp: new Date(post.createdAt).toLocaleDateString(),
+      content: post.content,
+      metadata: post.metadata || (post.embedUrl ? { embedUrl: post.embedUrl } : undefined),
+    }));
+
+    return { posts: formattedPosts, hasMore: data.hasMore };
+  } catch (error) {
+    console.error(error);
+    return { posts: [], hasMore: false };
+  }
 };
 
 export default function HybridSocialFeed() {
@@ -76,9 +63,14 @@ export default function HybridSocialFeed() {
 
   useEffect(() => {
     setLoading(true);
-    fetchFeedPage(page).then((newPosts) => {
-      setPosts((prev) => [...prev, ...newPosts]);
-      setHasMore(page < 5); // Stop after 5 pages for mock
+    fetchFeedPage(page).then((data) => {
+      setPosts((prev) => {
+        // Prevent duplicate posts in dev strict mode
+        const existingIds = new Set(prev.map(p => p.id));
+        const uniqueNewPosts = data.posts.filter(p => !existingIds.has(p.id));
+        return [...prev, ...uniqueNewPosts];
+      });
+      setHasMore(data.hasMore);
       setLoading(false);
     });
   }, [page]);
