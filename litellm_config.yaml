@@ -1,16 +1,16 @@
 model_list:
-- model_name: google/gemini-pro
+- model_name: openrouter/owl-alpha
   litellm_params:
-    model: gemini/gemini-pro
-- model_name: meta-llama/llama-3-8b-instruct:free
+    model: openrouter/openrouter/owl-alpha
+- model_name: deepseek/deepseek-v4-flash:free
   litellm_params:
-    model: openrouter/meta-llama/llama-3-8b-instruct:free
-- model_name: mistralai/mistral-7b-instruct:free
+    model: openrouter/deepseek/deepseek-v4-flash:free
+- model_name: google/lyria-3-pro-preview
   litellm_params:
-    model: openrouter/mistralai/mistral-7b-instruct:free
-- model_name: cohere/command-r-plus-08-2024:free
+    model: openrouter/google/lyria-3-pro-preview
+- model_name: google/lyria-3-clip-preview
   litellm_params:
-    model: openrouter/cohere/command-r-plus-08-2024:free
-- model_name: google/gemma-7b-it:free
+    model: openrouter/google/lyria-3-clip-preview
+- model_name: qwen/qwen3-coder:free
   litellm_params:
-    model: openrouter/google/gemma-7b-it:free
+    model: openrouter/qwen/qwen3-coder:free

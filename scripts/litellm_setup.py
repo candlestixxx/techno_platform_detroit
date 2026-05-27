@@ -1,27 +1,58 @@
+import urllib.request
+import json
 import yaml
 
 def get_free_models():
     """
-    Mocks querying inference providers for a list of free models,
-    testing them, and sorting by availability/ability based on model size.
+    Queries the OpenRouter API for a list of available models,
+    filters for free models, and sorts them by context length.
     """
+    url = "https://openrouter.ai/api/v1/models"
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req) as response:
+            data = json.loads(response.read().decode())
+    except Exception as e:
+        print(f"Error querying OpenRouter API: {e}")
+        return []
 
-    # In a real scenario, this would dynamically query APIs (e.g., OpenRouter free tier, HuggingFace free endpoints).
+    models = data.get("data", [])
+    free_models = []
 
-    # Mock tested & sorted models (smartest/fastest first)
-    sorted_models = [
-        {"model_name": "google/gemini-pro", "litellm_params": {"model": "gemini/gemini-pro"}},
-        {"model_name": "meta-llama/llama-3-8b-instruct:free", "litellm_params": {"model": "openrouter/meta-llama/llama-3-8b-instruct:free"}},
-        {"model_name": "mistralai/mistral-7b-instruct:free", "litellm_params": {"model": "openrouter/mistralai/mistral-7b-instruct:free"}},
-        {"model_name": "cohere/command-r-plus-08-2024:free", "litellm_params": {"model": "openrouter/cohere/command-r-plus-08-2024:free"}},
-        {"model_name": "google/gemma-7b-it:free", "litellm_params": {"model": "openrouter/google/gemma-7b-it:free"}},
-    ]
+    for model in models:
+        pricing = model.get("pricing", {})
+        # Check if both prompt and completion are effectively free
+        if pricing.get("prompt") == "0" and pricing.get("completion") == "0":
+            free_models.append({
+                "id": model.get("id"),
+                "name": model.get("name"),
+                "context_length": model.get("context_length", 0)
+            })
 
-    return sorted_models[:5] # Top 5 models
+    # Sort models by context length (descending) as a proxy for capability
+    free_models.sort(key=lambda x: x["context_length"], reverse=True)
+
+    # Return top 5 formatted for litellm
+    top_models = free_models[:5]
+    litellm_models = []
+
+    for model in top_models:
+        litellm_models.append({
+            "model_name": model["id"],
+            "litellm_params": {
+                "model": f"openrouter/{model['id']}"
+            }
+        })
+
+    return litellm_models
 
 def configure_litellm():
-    print("Querying and testing free model providers...")
+    print("Querying and testing free model providers (OpenRouter)...")
     top_models = get_free_models()
+
+    if not top_models:
+        print("No free models found or API request failed.")
+        return
 
     config = {
         "model_list": top_models
