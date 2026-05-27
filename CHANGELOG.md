@@ -1,6 +1,10 @@
 # CHANGELOG.md
 
-## v0.5.0 (Current)
+## v0.6.0 (Current)
+- Upgraded `UndergroundMap.tsx` marker placement to explicitly utilize the `event.coordinates` property queried from the live scraping APIs.
+- Built independent frontend profile routing (`/artist/[id]`) for specific Artists/Businesses to showcase their posts and marketplace products.
+
+## v0.5.0
 - Removed fallback mock scrapers, fully relying on `axios`/`cheerio` live DOM parsing for production event aggregators.
 - Implemented `/api/llm` API route proxy intended to interface with the locally configured `litellm` python instance for data summarizations and venue analytics.
 

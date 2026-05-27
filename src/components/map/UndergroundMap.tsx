@@ -49,13 +49,17 @@ export default function UndergroundMap({ events, businesses }: MapProps) {
         });
       };
 
-      // Add dummy coordinates for the mocked items near Detroit
+      // Add actual coordinates from the API data, fallback to generated deterministic offset if missing
       events.forEach((event, idx) => {
-        addMarker(event, [lng + (idx * 0.01), lat + (idx * 0.01)], "#9333EA"); // Purple for events
+        const markerLng = event.coordinates?.lng ?? (lng + (idx * 0.01));
+        const markerLat = event.coordinates?.lat ?? (lat + (idx * 0.01));
+        addMarker(event, [markerLng, markerLat], "#9333EA"); // Purple for events
       });
 
       businesses.forEach((biz, idx) => {
-        addMarker(biz, [lng - (idx * 0.01) - 0.01, lat - (idx * 0.01) - 0.01], "#10B981"); // Emerald for business
+        const markerLng = biz.coordinates?.lng ?? (lng - (idx * 0.01) - 0.01);
+        const markerLat = biz.coordinates?.lat ?? (lat - (idx * 0.01) - 0.01);
+        addMarker(biz, [markerLng, markerLat], "#10B981"); // Emerald for business
       });
     });
   }, [events, businesses, lng, lat, zoom]); // Added dependency array to prevent infinite re-renders

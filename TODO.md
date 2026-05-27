@@ -1,5 +1,5 @@
 # TODO.md
 
 Granular immediate tasks:
-- Enhance Mapbox layer styling for precise coordinate dropping instead of mathematical offsets.
-- Setup specific Next.js page overlays for independent Artist Profiles.
+- Configure Cloudflare or Vercel edge caching to prevent aggressive rate limiting from live scrapers.
+- Write a Playwright E2E testing suite to verify UI flows.
