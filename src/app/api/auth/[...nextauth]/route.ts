@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -17,27 +18,31 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Mock password verification for scaffolding phase.
-        // In production, we would use bcrypt.compare(credentials.password, user.passwordHash)
-        if (credentials.password !== "password") {
-          return null; // Reject if password doesn't match the mock standard
-        }
-
         const user = await prisma.user.findUnique({
           where: { email: credentials.email }
         });
 
         if (!user) {
-          // If the user doesn't exist during this mock test phase, let's create a mock profile
-          // so the developer can log in.
+          // If the user doesn't exist, create a new profile with the hashed password
+          const hashedPassword = await bcrypt.hash(credentials.password, 10);
           const newUser = await prisma.user.create({
             data: {
               email: credentials.email,
               name: credentials.email.split('@')[0],
+              password: hashedPassword,
               role: "USER" // Defaulting to USER for now
             }
           });
           return newUser;
+        }
+
+        // Verify the password if the user exists and has a password set
+        if (!user.password) return null;
+
+        const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+
+        if (!isPasswordValid) {
+          return null;
         }
 
         return user;

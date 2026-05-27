@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import HybridSocialFeed from "@/components/feed/HybridSocialFeed";
+import HeaderAuth from "@/components/layout/HeaderAuth";
 
 // Dynamically import the map to prevent window is not defined SSR errors
 const UndergroundMap = dynamic(() => import("@/components/map/UndergroundMap"), { ssr: false });
@@ -48,6 +49,7 @@ export default function Home() {
           >
             Marketplace
           </a>
+          <HeaderAuth />
         </nav>
       </header>
 

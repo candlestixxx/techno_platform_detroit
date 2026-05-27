@@ -25,8 +25,12 @@ describe("NextAuth Configuration", () => {
       expect(result).toBeNull();
     });
 
-    it("should return existing user if found in database", async () => {
-      const mockUser = { id: "1", email: "test@test.com", role: "USER" };
+    it("should return existing user if found in database and password matches", async () => {
+      // Mocking bcrypt logic implies we pass a properly hashed password for the test
+      const bcrypt = require("bcryptjs");
+      const hashedPassword = await bcrypt.hash("password", 10);
+      const mockUser = { id: "1", email: "test@test.com", role: "USER", password: hashedPassword };
+
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
 
       const result = await authorize({ email: "test@test.com", password: "password" }, null);
@@ -35,7 +39,7 @@ describe("NextAuth Configuration", () => {
       expect(result).toEqual(mockUser);
     });
 
-    it("should create and return a mock user if not found in database (for local dev fallback)", async () => {
+    it("should create and return a mock user with hashed password if not found in database", async () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
 
       const newMockUser = { id: "2", email: "new@test.com", name: "new", role: "USER" };
@@ -45,11 +49,12 @@ describe("NextAuth Configuration", () => {
 
       expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email: "new@test.com" } });
       expect(prisma.user.create).toHaveBeenCalledWith({
-        data: {
+        data: expect.objectContaining({
           email: "new@test.com",
           name: "new",
-          role: "USER"
-        }
+          role: "USER",
+          password: expect.any(String), // We expect a generated bcrypt hash string
+        })
       });
       expect(result).toEqual(newMockUser);
     });

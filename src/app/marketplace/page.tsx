@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { ShoppingCart, QrCode, Package, Music } from "lucide-react";
+import HeaderAuth from "@/components/layout/HeaderAuth";
+import Link from "next/link";
 
 export default function MarketplacePage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -35,13 +37,19 @@ export default function MarketplacePage() {
 
   return (
     <div className="min-h-screen bg-black text-gray-100 p-8">
-      <header className="mb-12 border-b border-gray-800 pb-6">
-        <h1 className="text-5xl font-black tracking-tighter uppercase mb-2">
-          Detroit <span className="text-gray-500">Underground</span> Exchange
-        </h1>
-        <p className="text-xl text-gray-400 font-medium">
-          Support local artists and businesses. Direct from the source.
-        </p>
+      <header className="mb-12 border-b border-gray-800 pb-6 flex justify-between items-start">
+        <div>
+          <h1 className="text-5xl font-black tracking-tighter uppercase mb-2">
+            Detroit <span className="text-gray-500">Underground</span> Exchange
+          </h1>
+          <p className="text-xl text-gray-400 font-medium mb-4">
+            Support local artists and businesses. Direct from the source.
+          </p>
+          <Link href="/" className="text-sm font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300">
+            ← Back to Hub
+          </Link>
+        </div>
+        <HeaderAuth />
       </header>
 
       {loading ? (
