@@ -1,14 +1,23 @@
 import { syncEvents } from "../src/lib/aggregator/sync";
+import * as liveScrapers from "../src/lib/aggregator/live-scrapers";
 import * as mockScrapers from "../src/lib/aggregator/mock-scrapers";
 
 // Mock the scrapers
+jest.mock("../src/lib/aggregator/live-scrapers", () => {
+  const originalModule = jest.requireActual("../src/lib/aggregator/live-scrapers");
+  return {
+    __esModule: true,
+    ...originalModule,
+    scrapeLiveMovementParties: jest.fn(originalModule.scrapeLiveMovementParties),
+    scrapeLiveTectroit: jest.fn(originalModule.scrapeLiveTectroit),
+  };
+});
+
 jest.mock("../src/lib/aggregator/mock-scrapers", () => {
   const originalModule = jest.requireActual("../src/lib/aggregator/mock-scrapers");
   return {
     __esModule: true,
     ...originalModule,
-    scrapeMovementParties: jest.fn(originalModule.scrapeMovementParties),
-    scrapeTectroit: jest.fn(originalModule.scrapeTectroit),
     fetchResidentAdvisorEvents: jest.fn(originalModule.fetchResidentAdvisorEvents),
   };
 });
@@ -19,10 +28,15 @@ describe("Event Aggregator Sync", () => {
   });
 
   it("should sync events from all sources", async () => {
+    // Force mock behavior to prevent actual network calls during test
+    (liveScrapers.scrapeLiveMovementParties as jest.Mock).mockResolvedValueOnce([{ source: "Movement" }]);
+    (liveScrapers.scrapeLiveTectroit as jest.Mock).mockResolvedValueOnce([{ source: "Tectroit" }]);
+    (mockScrapers.fetchResidentAdvisorEvents as jest.Mock).mockResolvedValueOnce([{ source: "RA" }]);
+
     const events = await syncEvents();
 
-    expect(mockScrapers.scrapeMovementParties).toHaveBeenCalled();
-    expect(mockScrapers.scrapeTectroit).toHaveBeenCalled();
+    expect(liveScrapers.scrapeLiveMovementParties).toHaveBeenCalled();
+    expect(liveScrapers.scrapeLiveTectroit).toHaveBeenCalled();
     expect(mockScrapers.fetchResidentAdvisorEvents).toHaveBeenCalled();
 
     expect(events.length).toBe(3);
@@ -32,15 +46,17 @@ describe("Event Aggregator Sync", () => {
   });
 
   it("should handle errors gracefully without failing the entire sync", async () => {
-    // Force one scraper to fail
-    (mockScrapers.scrapeTectroit as jest.Mock).mockRejectedValueOnce(new Error("Network error"));
+    // Force one scraper to fail entirely
+    (liveScrapers.scrapeLiveMovementParties as jest.Mock).mockResolvedValueOnce([{ source: "Movement" }]);
+    (liveScrapers.scrapeLiveTectroit as jest.Mock).mockRejectedValueOnce(new Error("Network error"));
+    (mockScrapers.fetchResidentAdvisorEvents as jest.Mock).mockResolvedValueOnce([{ source: "RA" }]);
 
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
     const events = await syncEvents();
 
-    expect(mockScrapers.scrapeMovementParties).toHaveBeenCalled();
-    expect(mockScrapers.scrapeTectroit).toHaveBeenCalled();
+    expect(liveScrapers.scrapeLiveMovementParties).toHaveBeenCalled();
+    expect(liveScrapers.scrapeLiveTectroit).toHaveBeenCalled();
     expect(mockScrapers.fetchResidentAdvisorEvents).toHaveBeenCalled();
 
     // The other two should still succeed

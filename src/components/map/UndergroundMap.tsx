@@ -102,50 +102,57 @@ export default function UndergroundMap({ events, businesses }: MapProps) {
       <div className="flex-1 relative">
         <div ref={mapContainer} className="absolute inset-0" />
 
-        {/* Interactive Drawer / Popup */}
+        {/* Interactive Drawer / Popup - Enhanced for Mobile */}
         {selectedItem && (
-          <div className="absolute bottom-0 left-0 right-0 p-4 z-10 animate-in slide-in-from-bottom-4">
-            <div className="max-w-md mx-auto bg-gray-900 border border-gray-700 rounded-lg shadow-2xl p-4 flex flex-col gap-3">
-              <div className="flex justify-between items-start">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-widest text-purple-400">
-                    {selectedItem.type === "event" ? "Live Event" : "Local Business"}
-                  </span>
-                  <h3 className="text-xl font-black">{selectedItem.title}</h3>
+          <div className="absolute bottom-0 left-0 right-0 z-10 animate-in slide-in-from-bottom-4 md:p-4">
+            <div className="max-w-md mx-auto bg-gray-900 border-t md:border border-gray-700 md:rounded-lg rounded-t-2xl shadow-2xl flex flex-col gap-3 max-h-[80vh] overflow-y-auto relative pb-safe">
+              {/* Mobile Drag Handle */}
+              <div className="w-full flex justify-center pt-3 pb-1 md:hidden sticky top-0 bg-gray-900 z-20">
+                <div className="w-12 h-1.5 bg-gray-700 rounded-full"></div>
+              </div>
+
+              <div className="p-4 flex flex-col gap-3">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-widest text-purple-400">
+                      {selectedItem.type === "event" ? "Live Event" : "Local Business"}
+                    </span>
+                    <h3 className="text-xl font-black">{selectedItem.title}</h3>
+                  </div>
+                  <button
+                    onClick={() => setSelectedItem(null)}
+                    className="text-gray-400 hover:text-white transition-colors bg-gray-800 p-1.5 rounded-full"
+                  >
+                    <X size={20} />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setSelectedItem(null)}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  <X size={20} />
+
+                <div className="flex items-center gap-2 text-sm text-gray-400">
+                  <MapPin size={16} />
+                  <span>{selectedItem.venue}</span>
+                </div>
+
+                {selectedItem.type === "event" && (
+                  <div className="bg-gray-800 p-3 rounded text-sm mt-2">
+                    <div className="font-bold text-gray-300 mb-1">Lineup:</div>
+                    <div className="text-gray-400">{selectedItem.lineup.join(" • ")}</div>
+                  </div>
+                )}
+
+                {selectedItem.type === "business" && (
+                  <div className="bg-emerald-900/30 border border-emerald-800/50 p-3 rounded text-sm mt-2">
+                    <div className="font-bold text-emerald-400 mb-1">Special Offer:</div>
+                    <div className="text-gray-300">{selectedItem.offer}</div>
+                    <div className="mt-2 text-xs font-mono bg-black p-1.5 inline-block rounded text-emerald-400">
+                      Code: {selectedItem.code}
+                    </div>
+                  </div>
+                )}
+
+                <button className="w-full py-3 bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wider rounded-lg hover:bg-white transition-colors mt-4 sticky bottom-4">
+                  {selectedItem.type === "event" ? "Get Tickets via RA" : "Claim Coupon"}
                 </button>
               </div>
-
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <MapPin size={16} />
-                <span>{selectedItem.venue}</span>
-              </div>
-
-              {selectedItem.type === "event" && (
-                <div className="bg-gray-800 p-3 rounded text-sm">
-                  <div className="font-bold text-gray-300 mb-1">Lineup:</div>
-                  <div className="text-gray-400">{selectedItem.lineup.join(" • ")}</div>
-                </div>
-              )}
-
-              {selectedItem.type === "business" && (
-                <div className="bg-emerald-900/30 border border-emerald-800/50 p-3 rounded text-sm">
-                  <div className="font-bold text-emerald-400 mb-1">Special Offer:</div>
-                  <div className="text-gray-300">{selectedItem.offer}</div>
-                  <div className="mt-2 text-xs font-mono bg-black p-1 inline-block rounded text-emerald-400">
-                    Code: {selectedItem.code}
-                  </div>
-                </div>
-              )}
-
-              <button className="w-full py-2 bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wider rounded hover:bg-white transition-colors mt-2">
-                {selectedItem.type === "event" ? "Get Tickets via RA" : "Claim Coupon"}
-              </button>
             </div>
           </div>
         )}

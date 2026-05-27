@@ -5,16 +5,17 @@ This session successfully implemented the initial scaffolding for the "Detroit U
 
 We followed up by wiring the `HybridSocialFeed` and `UndergroundMap` components into the main application UI at `src/app/page.tsx`. Additionally, we replaced the mocked marketplace and feed API route with real Prisma database calls, and added proper test suites to test the REST integrations.
 
+Most recently, we successfully refactored the data ingestion pipeline, installing `axios` and `cheerio` to create live DOM scrapers for Movement Parties and Tectroit, which gracefully fallback to mocked logic if rate-limited. We also improved the Mapbox drawer popup specifically tailored for mobile user experiences (sliding drawers, drag handles).
+
 ## Structural Shifts & System Memories
-- Next.js 14 App Router and Prisma form the primary backbone.
+- Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
 - We opted for heavily typed Prisma enums (`UserRole`, `ProductType`, `DeliveryType`, `PostType`) to ensure robust schema relationships for the multi-tier user system.
 - Front-end mapping relies on `mapbox-gl` with a dark industrial styling to match the techno-flyer aesthetic requested.
 - The social feed utilizes the `IntersectionObserver` API for smooth, zero-jitter infinite scrolling instead of basic pagination.
-- Scrapers are currently mocked under `src/lib/aggregator` and are designed to fail gracefully during sync loops.
-- Python script `scripts/litellm_setup.py` added to establish a top-5 list of free models via OpenRouter/Gemini for LLM routing configuration.
+- Scrapers (`src/lib/aggregator/live-scrapers.ts`) actively attempt to parse DOM nodes from target URLs but use `try/catch` to gracefully fall back to mock data if blocked by cloudflare/rate limiters.
+- Python script `scripts/litellm_setup.py` added to establish a top-5 list of free models via OpenRouter for LLM routing configuration.
 
 ## Next Steps for Successor Model
 - Read `TODO.md` and `ROADMAP.md` to resume work seamlessly.
-- Prioritize replacing mock scrapers in `src/lib/aggregator` with live scraping logic (Puppeteer or Axios/Cheerio).
+- Prioritize implementing a Live Resident Advisor (RA) GraphQL or API endpoint to complete the scraper engine.
 - Expand Stripe Connect capabilities for marketplace items.
-- Focus on mobile styling for MapBox components.
