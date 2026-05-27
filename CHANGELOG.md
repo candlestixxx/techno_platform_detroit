@@ -1,6 +1,10 @@
 # CHANGELOG.md
 
-## v0.8.0 (Current)
+## v0.9.0 (Current)
+- Added authenticated POST endpoint for users to create new feed broadcasts in `/api/feed/route.ts`.
+- Integrated a real-time post creation form UI exclusively visible to authenticated users in `HybridSocialFeed.tsx`.
+
+## v0.8.0
 - Prepared repository for Vercel production deployment (`DEPLOY.md`).
 - Implemented GitHub Actions CI workflow to run tests, linting, and builds automatically.
 

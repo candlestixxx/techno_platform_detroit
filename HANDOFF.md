@@ -21,6 +21,8 @@ To wrap up the architecture, we implemented Playwright E2E browser tests and hoo
 
 Finally, we established a GitHub Actions CI pipeline and updated `DEPLOY.md` to map out the required environment architecture (Connection pooling, Edge variables) necessary for Vercel.
 
+Before closing the session, we hooked up the frontend `HybridSocialFeed` to allow authenticated users to post new text broadcasts natively from the UI, sending authorized `POST` requests directly to `/api/feed`.
+
 ## Structural Shifts & System Memories
 - Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
 - We opted for heavily typed Prisma enums (`UserRole`, `ProductType`, `DeliveryType`, `PostType`) to ensure robust schema relationships for the multi-tier user system.
@@ -32,6 +34,7 @@ Finally, we established a GitHub Actions CI pipeline and updated `DEPLOY.md` to 
 - Marketplace checkout uses a dynamic modal, sorting flows automatically by physical merchandise vs digital coupons vs audio downloads. Real Stripe sessions dynamically take 5% platform fees and transfer the balance to connected `stripeAccountId`s.
 - `api/llm` requires a Bearer token verification corresponding to `LITELLM_API_KEY` for secure internal traffic.
 - Artist/Business profiles are heavily nested Next.js Server Components (`src/app/artist/[id]`) that perform single rapid Prisma lookups to populate the page for maximum SEO impact, whereas the Dashboard utilizes heavy client-side states.
+- Feed writing is securely managed on the backend by mapping the active user JWT to the database insertion via `getServerSession()`.
 
 ## Next Steps for Successor Model
-- Proceed with Vercel deployment. No pending structural tasks remain.
+- Consider proceeding with Vercel deployment. No pending structural tasks remain.

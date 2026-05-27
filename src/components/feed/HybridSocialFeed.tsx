@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Music, MapPin, Store } from "lucide-react";
+import { Music, MapPin, Store, Send } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 // Mock Data Types
 type PostType = "ARTIST_POST" | "EVENT_UPDATE" | "BUSINESS_SPOTLIGHT";
@@ -40,8 +41,11 @@ const fetchFeedPage = async (page: number): Promise<{ posts: Post[]; hasMore: bo
 };
 
 export default function HybridSocialFeed() {
+  const { data: session } = useSession();
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
+  const [newPostContent, setNewPostContent] = useState("");
+  const [isPosting, setIsPosting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -83,8 +87,63 @@ export default function HybridSocialFeed() {
     }
   };
 
+  const handleCreatePost = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPostContent.trim()) return;
+
+    setIsPosting(true);
+    try {
+      const res = await fetch("/api/feed", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: newPostContent, type: "GENERAL" }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        // Construct a new post object for immediate UI rendering
+        const newPost: Post = {
+          id: data.post.id,
+          type: "ARTIST_POST", // Fallback for visual rendering logic
+          author: session?.user?.name || "Me",
+          timestamp: "Just now",
+          content: data.post.content,
+        };
+        setPosts((prev) => [newPost, ...prev]);
+        setNewPostContent("");
+      }
+    } catch (error) {
+      console.error("Failed to create post", error);
+    } finally {
+      setIsPosting(false);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto py-8 px-4 flex flex-col gap-6">
+
+      {session && session.user && (
+        <form onSubmit={handleCreatePost} className="bg-gray-900 border border-purple-900/50 p-4 rounded shadow-xl flex flex-col gap-3">
+          <textarea
+            value={newPostContent}
+            onChange={(e) => setNewPostContent(e.target.value)}
+            placeholder="Broadcast to the underground..."
+            className="w-full bg-black border border-gray-800 rounded p-3 text-white focus:border-purple-500 outline-none resize-none h-24 transition-colors"
+            required
+          />
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={isPosting || !newPostContent.trim()}
+              className="bg-purple-600 hover:bg-purple-500 text-white font-bold uppercase tracking-widest px-6 py-2 rounded transition-colors disabled:opacity-50 flex items-center gap-2 text-sm"
+            >
+              <Send size={16} />
+              {isPosting ? "Sending..." : "Transmit"}
+            </button>
+          </div>
+        </form>
+      )}
+
       {posts.map((post, index) => {
         const isLast = index === posts.length - 1;
 

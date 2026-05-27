@@ -77,3 +77,35 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Failed to fetch feed" }, { status: 500 });
   }
 }
+
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]/route";
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user || !(session.user as any).id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+
+    if (!body.content) {
+      return NextResponse.json({ error: "Missing post content" }, { status: 400 });
+    }
+
+    const newPost = await prisma.post.create({
+      data: {
+        content: body.content,
+        type: body.type || "GENERAL",
+        authorId: (session.user as any).id,
+      },
+    });
+
+    return NextResponse.json({ success: true, post: newPost }, { status: 201 });
+  } catch (error) {
+    console.error("Failed to create post:", error);
+    return NextResponse.json({ error: "Failed to create post" }, { status: 500 });
+  }
+}
