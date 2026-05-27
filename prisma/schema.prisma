@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+  posts    Post[]
+}
+
+enum UserRole {
+  USER
+  ARTIST
+  BUSINESS
+  NONPROFIT
+}
+
+model Product {
+  id          String       @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  type        ProductType
+  sellerId    String
+  seller      User         @relation(fields: [sellerId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  delivery    DeliveryType @default(SHIPPED)
+  qrCode      String?
+}
+
+enum ProductType {
+  PHYSICAL_MERCH
+  LIMITED_VINYL
+  DIGITAL_TRACK
+  LOCAL_PROMO_COUPON
+}
+
+enum DeliveryType {
+  SHIPPED
+  PICK_UP
+  ELECTRONIC_ONLY
+}
+
+model Event {
+  id           String   @id @default(uuid())
+  title        String
+  date         DateTime
+  venue        String
+  lineup       String[]
+  isAfterparty Boolean  @default(false)
+  coordinates  Json? // { lat: number, lng: number }
+  source       String // 'RA', 'Tectroit', 'Movement', 'Manual'
+  originalLink String?
+  image        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  content   String
+  type      PostType
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  embedUrl  String?
+}
+
+enum PostType {
+  ARTIST_UPDATE
+  EVENT_ANNOUNCEMENT
+  BUSINESS_SPOTLIGHT
+  GENERAL
+}
