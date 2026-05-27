@@ -9,7 +9,7 @@ Most recently, we successfully refactored the data ingestion pipeline, installin
 
 We addressed all remaining UX nitpicks, wired up a Stripe Checkout mock API (`src/app/api/checkout/route.ts`), and implemented `next-auth` JWT architecture combined with the `PrismaAdapter`. We also wrote the corresponding Jest tests for the authentication flows.
 
-Finally, we enhanced the authentication flow to include `bcrypt` password hashing for the credentials provider and built a fully functional frontend Login modal interface, which is now wired to the Next.js layout and headers.
+Finally, we enhanced the authentication flow to include `bcrypt` password hashing for the credentials provider and built a fully functional frontend Login modal interface, which is now wired to the Next.js layout and headers. We then added `GoogleProvider` and `GithubProvider` for OAuth based sign-ins and built those corresponding buttons into the UI.
 
 ## Structural Shifts & System Memories
 - Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
@@ -24,4 +24,3 @@ Finally, we enhanced the authentication flow to include `bcrypt` password hashin
 ## Next Steps for Successor Model
 - Read `TODO.md` and `ROADMAP.md` to resume work seamlessly.
 - Finalize Stripe Connect production implementation.
-- Hook up OAuth login logic for additional providers.

@@ -1,6 +1,10 @@
 # CHANGELOG.md
 
-## v0.2.0 (Current)
+## v0.3.0 (Current)
+- Configured Google and GitHub OAuth providers within `next-auth`.
+- Updated authentication UI with OAuth login buttons.
+
+## v0.2.0
 - Implemented live HTML scrapers (Axios/Cheerio) and RA.co GraphQL fetcher.
 - Optimized Mapbox UI for mobile devices (drag handles, sliding drawers).
 - Implemented Stripe Checkout flow mock API.

@@ -1,5 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -7,6 +9,14 @@ import bcrypt from "bcryptjs";
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "mock_google_id",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "mock_google_secret",
+    }),
+    GithubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID || "mock_github_id",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || "mock_github_secret",
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {

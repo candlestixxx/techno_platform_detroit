@@ -149,8 +149,6 @@ export default function MarketplacePage() {
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
                           productId: checkoutProduct.id,
-                          title: checkoutProduct.title,
-                          price: checkoutProduct.price,
                         }),
                       });
                       const data = await res.json();
@@ -207,8 +205,6 @@ export default function MarketplacePage() {
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({
                             productId: checkoutProduct.id,
-                            title: checkoutProduct.title,
-                            price: checkoutProduct.price,
                           }),
                         });
                         const data = await res.json();
