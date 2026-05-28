@@ -23,6 +23,10 @@ Finally, we established a GitHub Actions CI pipeline and updated `DEPLOY.md` to 
 
 Before closing the session, we hooked up the frontend `HybridSocialFeed` to allow authenticated users to post new text broadcasts natively from the UI, sending authorized `POST` requests directly to `/api/feed`.
 
+We also successfully implemented the `/forum` route utilizing standard GET/POST architecture against a relational `ForumTopic` and `ForumReply` Prisma backend layout.
+
+To expand the local commerce angle, we gamified the Marketplace. Digital coupons now require users to simulate a geolocation lock (mimicking physical proximity to the business) before the QR code drops.
+
 ## Structural Shifts & System Memories
 - Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
 - We opted for heavily typed Prisma enums (`UserRole`, `ProductType`, `DeliveryType`, `PostType`) to ensure robust schema relationships for the multi-tier user system.

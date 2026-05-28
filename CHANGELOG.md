@@ -1,6 +1,9 @@
 # CHANGELOG.md
 
-## v1.0.0 (Current)
+## v1.1.0 (Current)
+- Introduced gamified "Geolocation Scan" UI to unlock Digital Coupons when claiming marketplace drops from local businesses.
+
+## v1.0.0
 - Prepared final V1 release structure for Detroit Underground.
 - Refactored internal API route ES6 imports to strict top-of-file guidelines to resolve final code review nitpicks.
 

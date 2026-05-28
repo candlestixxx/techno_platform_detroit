@@ -10,6 +10,8 @@ export default function MarketplacePage() {
   const [loading, setLoading] = useState(true);
   const [checkoutProduct, setCheckoutProduct] = useState<any | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [isScanningGeo, setIsScanningGeo] = useState(false);
+  const [geoVerified, setGeoVerified] = useState(false);
 
   useEffect(() => {
     // Fetch mock products from the API route we created
@@ -178,15 +180,41 @@ export default function MarketplacePage() {
                   </button>
                 </form>
               ) : checkoutProduct.type === "LOCAL_PROMO_COUPON" ? (
-                // Digital Coupon Claim
+                // Digital Coupon Claim with Simulated Geo-Scan
                 <div className="flex flex-col items-center justify-center py-4 text-center">
-                  <QrCode size={64} className="text-emerald-400 mb-4" />
-                  <p className="text-gray-400 text-sm mb-6">
-                    This will generate a unique digital coupon linked to your account. Present the resulting QR code at {checkoutProduct.seller.name}.
-                  </p>
-                  <button type="button" onClick={() => { alert("Coupon Claimed!"); setCheckoutProduct(null); }} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase tracking-widest py-3 rounded transition-colors">
-                    Generate QR Code
-                  </button>
+                  <QrCode size={64} className={`mb-4 transition-all duration-500 ${isScanningGeo ? 'text-emerald-500 animate-pulse scale-110' : geoVerified ? 'text-emerald-400' : 'text-gray-600'}`} />
+
+                  {!geoVerified ? (
+                    <>
+                      <p className="text-gray-400 text-sm mb-6">
+                        You must be physically near {checkoutProduct.seller.name} to claim this drop. Scan your coordinates to unlock.
+                      </p>
+                      <button
+                        type="button"
+                        disabled={isScanningGeo}
+                        onClick={() => {
+                          setIsScanningGeo(true);
+                          // Simulate a geolocation check taking 2 seconds
+                          setTimeout(() => {
+                            setIsScanningGeo(false);
+                            setGeoVerified(true);
+                          }, 2000);
+                        }}
+                        className="w-full bg-gray-800 hover:bg-gray-700 text-emerald-500 border border-emerald-900 font-bold uppercase tracking-widest py-3 rounded transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      >
+                        {isScanningGeo ? "Acquiring Satellites..." : "Scan Location"}
+                      </button>
+                    </>
+                  ) : (
+                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 w-full">
+                       <p className="text-emerald-400 font-bold text-sm mb-6 uppercase tracking-widest">
+                        Location Verified. Drop Unlocked.
+                      </p>
+                      <button type="button" onClick={() => { alert("Coupon Claimed!"); setCheckoutProduct(null); setGeoVerified(false); }} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase tracking-widest py-3 rounded transition-colors shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                        Generate QR Code
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 // Digital Download
