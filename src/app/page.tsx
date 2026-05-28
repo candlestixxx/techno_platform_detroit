@@ -66,6 +66,12 @@ export default function Home() {
           >
             Marketplace
           </a>
+          <a
+            href="/profile"
+            className="font-bold uppercase tracking-wider text-sm px-4 py-2 rounded text-gray-300 hover:bg-gray-800 transition-colors border border-transparent"
+          >
+            Profile
+          </a>
           <HeaderAuth />
         </nav>
       </header>
