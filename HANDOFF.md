@@ -1,44 +1,22 @@
 # HANDOFF.md
 
 ## Session Summary
-This session successfully implemented the initial scaffolding for the "Detroit Underground Platform", fulfilling the comprehensive set of prompt instructions. We established the `AGENTS.md` context, created the Next.js foundation, built the `prisma.schema`, and developed core backend/frontend modules (Event Aggregator, Mapbox GL Interactive Map, Marketplace API/UI, and Hybrid Social Feed). We also generated the requested global core documentation and a python script to configure `litellm` with the best available free models.
 
-We followed up by wiring the `HybridSocialFeed` and `UndergroundMap` components into the main application UI at `src/app/page.tsx`. Additionally, we replaced the mocked marketplace and feed API route with real Prisma database calls, and added proper test suites to test the REST integrations.
+In this session, the Detroit Underground Hub was fully scaffolded and brought up to v1.1.0.
 
-Most recently, we successfully refactored the data ingestion pipeline, installing `axios` and `cheerio` to create live DOM scrapers for Movement Parties and Tectroit, which gracefully fallback to mocked logic if rate-limited. We also improved the Mapbox drawer popup specifically tailored for mobile user experiences (sliding drawers, drag handles).
+### Key Milestones Achieved:
+1. **Aggregator Engine:** Implemented live web scrapers using `axios` and `cheerio` to fetch event data from Movement Parties, Tectroit, and Resident Advisor. Events are synced directly into the Prisma database.
+2. **Interactive Map:** Built the Mapbox GL integration (`UndergroundMap.tsx`) featuring dynamic pins mapped from API geodata with fallbacks. It handles SSR properly via Next.js dynamic imports.
+3. **Marketplace & Stripe:** Added the `api/stripe/onboard` route to mock and handle connected account creation (Stripe Connect). The frontend supports a visual checkout process with local coupon claiming logic.
+4. **Social Feed:** `HybridSocialFeed.tsx` is built with infinite scrolling (IntersectionObserver) combining artist posts, business specials, and events.
+5. **Authentication:** Integrated `next-auth` with PrismaAdapter, supporting Credentials and OAuth logins securely.
+6. **LiteLLM Configurator:** Built `scripts/litellm_setup.py` to auto-fetch free models from OpenRouter and deploy them for the `/api/llm` route proxy.
+7. **CI/CD & Testing:** Finalized Jest and Playwright E2E configurations. Set up `.github/workflows/main.yml` for automated verifications. Next.js 15+ promise/param hydration deprecation warnings were fixed.
 
-We addressed all remaining UX nitpicks, wired up a Stripe Checkout mock API (`src/app/api/checkout/route.ts`), and implemented `next-auth` JWT architecture combined with the `PrismaAdapter`. We also wrote the corresponding Jest tests for the authentication flows.
+### Notes for Next Model/Developer:
+- **Database:** Prisma v5 is enforced. The app expects a PostgreSQL connection. If using Vercel, ensure a connection pooler is active.
+- **Stripe:** The app uses fallback mocks (`sk_test_mock123`). Inject real secret keys in production environments.
+- **Testing:** Do not run Jest on the `/e2e/` folder. Use `npx playwright test` for UI checks and `npm test` for backend/utility tests.
+- **Architecture:** Continue utilizing Tailwind CSS and the App Router paradigms established here. Ensure the global documentation standard (`VISION.md`, `ROADMAP.md`, `CHANGELOG.md`) is maintained with every increment.
 
-Finally, we enhanced the authentication flow to include `bcrypt` password hashing for the credentials provider and built a fully functional frontend Login modal interface, which is now wired to the Next.js layout and headers. We then added `GoogleProvider` and `GithubProvider` for OAuth based sign-ins and built those corresponding buttons into the UI.
-
-In the most recent iteration, we implemented full Stripe Connect onboarding logic by expanding the database schema and adding a new route (`/api/stripe/onboard`). We also finalized the Marketplace checkout API to dynamically split platform fees and deposit transaction amounts securely into verified connected accounts using `transfer_data`.
-
-In the absolute final configuration sweep, we stripped away the fallback logic from the event aggregator, creating a pure production-grade DOM scraper for RA.co, Tectroit, and MovementParties. We also hooked up a proxy API endpoint (`/api/llm`) that securely bridges the Next.js frontend with the locally generated LiteLLM server configurations for AI-automated tasks.
-
-In this concluding UX enhancement iteration, we bound the `mapboxgl.Marker` components strictly to the `coordinates` property fetched via our live aggregators (falling back to generated offsets if the original API lacked geocoding data for a specific underground venue). Lastly, we constructed the independent `[id]` routing for Artist Profiles, creating a dedicated SEO-friendly landing page for DJs/Businesses to distribute their latest tracks and sell merch directly to their fans without needing the user to navigate the central map dashboard.
-
-To wrap up the architecture, we implemented Playwright E2E browser tests and hooked up `Cache-Control` Headers to critical data endpoints to prevent rate limits.
-
-Finally, we established a GitHub Actions CI pipeline and updated `DEPLOY.md` to map out the required environment architecture (Connection pooling, Edge variables) necessary for Vercel.
-
-Before closing the session, we hooked up the frontend `HybridSocialFeed` to allow authenticated users to post new text broadcasts natively from the UI, sending authorized `POST` requests directly to `/api/feed`.
-
-We also successfully implemented the `/forum` route utilizing standard GET/POST architecture against a relational `ForumTopic` and `ForumReply` Prisma backend layout.
-
-To expand the local commerce angle, we gamified the Marketplace. Digital coupons now require users to simulate a geolocation lock (mimicking physical proximity to the business) before the QR code drops.
-
-## Structural Shifts & System Memories
-- Next.js 14 App Router and Prisma form the primary backbone. We are running Prisma v5.x due to constructor issues with v7.x during Next.js builds.
-- We opted for heavily typed Prisma enums (`UserRole`, `ProductType`, `DeliveryType`, `PostType`) to ensure robust schema relationships for the multi-tier user system.
-- Front-end mapping relies on `mapbox-gl` with a dark industrial styling to match the techno-flyer aesthetic requested. Map is dynamically loaded via `next/dynamic` with SSR disabled. Map markers prioritize `coordinates.lat`/`lng` objects from the backend payload.
-- The social feed utilizes the `IntersectionObserver` API for smooth, zero-jitter infinite scrolling instead of basic pagination.
-- Scrapers (`src/lib/aggregator/live-scrapers.ts`) actively attempt to parse DOM nodes from target URLs but use `try/catch` to gracefully fall back to mock data if blocked by cloudflare/rate limiters.
-- Python script `scripts/litellm_setup.py` added to establish a top-5 list of free models via OpenRouter for LLM routing configuration.
-- Authentication relies on `next-auth` JWT sessions paired with Prisma. Passwords are mathematically hashed using `bcrypt` before database storage. Support is active for OAuth (Google, GitHub) alongside credentials.
-- Marketplace checkout uses a dynamic modal, sorting flows automatically by physical merchandise vs digital coupons vs audio downloads. Real Stripe sessions dynamically take 5% platform fees and transfer the balance to connected `stripeAccountId`s.
-- `api/llm` requires a Bearer token verification corresponding to `LITELLM_API_KEY` for secure internal traffic.
-- Artist/Business profiles are heavily nested Next.js Server Components (`src/app/artist/[id]`) that perform single rapid Prisma lookups to populate the page for maximum SEO impact, whereas the Dashboard utilizes heavy client-side states.
-- Feed writing is securely managed on the backend by mapping the active user JWT to the database insertion via `getServerSession()`.
-
-## Next Steps for Successor Model
-- Consider proceeding with Vercel deployment. No pending structural tasks remain.
+End of session handoff successfully prepared.
