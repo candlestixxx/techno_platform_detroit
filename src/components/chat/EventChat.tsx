@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { Send, Loader2 } from "lucide-react";
+import { io, Socket } from "socket.io-client";
 
 type Message = {
   id: string;
@@ -19,6 +20,8 @@ export default function EventChat({ eventId }: { eventId: string }) {
   const [isSending, setIsSending] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   const fetchMessages = async () => {
     try {
@@ -38,12 +41,25 @@ export default function EventChat({ eventId }: { eventId: string }) {
 
   useEffect(() => {
     fetchMessages();
-    // Setup short-polling for pseudo-realtime chat
-    const interval = setInterval(() => {
-      fetchMessages();
-    }, 5000); // Poll every 5 seconds
 
-    return () => clearInterval(interval);
+    // Connect to WebSocket server
+    const newSocket = io(window.location.origin, {
+      path: "/socket.io/",
+    });
+    setSocket(newSocket);
+
+    newSocket.on("connect", () => {
+      newSocket.emit("join_event_room", eventId);
+    });
+
+    newSocket.on("new_message", (message: Message) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    return () => {
+      newSocket.emit("leave_event_room", eventId);
+      newSocket.disconnect();
+    };
   }, [eventId]);
 
   useEffect(() => {
@@ -67,6 +83,11 @@ export default function EventChat({ eventId }: { eventId: string }) {
         const data = await res.json();
         setMessages((prev) => [...prev, data.message]);
         setNewMessage("");
+
+        // Broadcast over WebSocket
+        if (socket) {
+          socket.emit("send_message", { ...data.message, eventId });
+        }
       }
     } catch (error) {
       console.error("Failed to send message", error);
