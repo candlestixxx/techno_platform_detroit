@@ -3,11 +3,18 @@ import { prisma } from "@/lib/prisma";
 import webpush from "web-push";
 
 // In production, configure VAPID keys properly
-webpush.setVapidDetails(
-  "mailto:contact@detroitunderground.com",
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "BGB4mVZK3x8Fzj7P_d_0H_1YcXZDweqwdMwlKZgi_DBIwL64JLyUQlf1PY3YCyVis_4cfynGhfp2D84zIpp0Z7U",
-  process.env.VAPID_PRIVATE_KEY || "RYNTmq-Zca1IgWZI0qPWhCwevATJM2e-2qCKZD63n_o"
-);
+const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "dummy_public_key";
+const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY || "dummy_private_key";
+
+if (vapidPublicKey !== "dummy_public_key" && vapidPrivateKey !== "dummy_private_key") {
+  webpush.setVapidDetails(
+    "mailto:contact@detroitunderground.com",
+    vapidPublicKey,
+    vapidPrivateKey
+  );
+} else {
+  console.warn("Push notifications disabled in development without VAPID keys.");
+}
 
 export async function POST(request: Request) {
   try {

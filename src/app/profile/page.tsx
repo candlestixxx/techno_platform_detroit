@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 export default function ProfilePage() {
   const { data: session, status } = useSession();
   const [profileData, setProfileData] = useState<any>(null);
+  const [aiRecs, setAiRecs] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -19,6 +20,15 @@ export default function ProfilePage() {
         .then((data) => {
           setProfileData(data);
           setLoading(false);
+          // Fetch AI Recommendations in background
+          fetch("/api/ai/recommendations")
+             .then(res => res.json())
+             .then(recData => {
+                 if (recData.recommendations) {
+                     setAiRecs(recData.recommendations);
+                 }
+             })
+             .catch(console.error);
         })
         .catch((err) => {
           setError(err.message);
@@ -122,6 +132,29 @@ export default function ProfilePage() {
           )}
         </section>
       </div>
+
+      {/* AI Recommendations Section */}
+      <section className="mt-8 bg-zinc-950 border border-purple-900/50 p-6 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+        <h2 className="text-2xl font-bold mb-4 font-mono text-white flex items-center">
+           <span className="bg-purple-500 w-2 h-6 mr-3 inline-block"></span>
+           AI Underground Intel
+        </h2>
+        {aiRecs ? (
+           <div className="bg-zinc-900 p-4 rounded-lg border border-purple-900/30 text-purple-200 font-mono text-sm leading-relaxed whitespace-pre-line">
+              {aiRecs}
+           </div>
+        ) : (
+           <div className="animate-pulse flex space-x-4">
+             <div className="flex-1 space-y-4 py-1">
+               <div className="h-2 bg-zinc-800 rounded w-3/4"></div>
+               <div className="space-y-2">
+                 <div className="h-2 bg-zinc-800 rounded"></div>
+                 <div className="h-2 bg-zinc-800 rounded w-5/6"></div>
+               </div>
+             </div>
+           </div>
+        )}
+      </section>
     </div>
   );
 }

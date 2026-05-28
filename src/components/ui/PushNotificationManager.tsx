@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
-const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "BGB4mVZK3x8Fzj7P_d_0H_1YcXZDweqwdMwlKZgi_DBIwL64JLyUQlf1PY3YCyVis_4cfynGhfp2D84zIpp0Z7U";
+const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "dummy_public_key";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
