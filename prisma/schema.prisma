@@ -32,6 +32,7 @@ model User {
   subscriptions Subscription[] @relation("Subscriber")
   artistTiers   SubscriptionTier[] @relation("Artist")
   redemptions   CouponRedemption[]
+  pushSubscriptions PushSubscription[]
 }
 
 model Account {
@@ -136,6 +137,16 @@ model CouponRedemption {
   productId String
   product   Product  @relation(fields: [productId], references: [id])
   redeemedAt DateTime @default(now())
+}
+
+model PushSubscription {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
 }
 
 model Event {
