@@ -15,6 +15,6 @@ Major structural milestones:
 - [x] Blockchain Merch Verification.
 
 ## Phase 2: Mobile Port
-- [ ] Initialize Expo / React Native scaffolding.
-- [ ] Build mobile navigation UI.
+- [x] Initialize Expo / React Native scaffolding.
+- [x] Build mobile navigation UI.
 - [ ] Hook mobile UI to Next.js API layer.

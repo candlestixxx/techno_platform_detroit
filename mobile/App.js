@@ -1,52 +1,45 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import FeedScreen from './src/screens/FeedScreen';
+import MapScreen from './src/screens/MapScreen';
+import MarketplaceScreen from './src/screens/MarketplaceScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+
+const Tab = createBottomTabNavigator();
+
+const DetroitDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: '#000000',
+    card: '#111111',
+    text: '#ffffff',
+    border: '#333333',
+    primary: '#39ff14', // Neon Green active tint
+  },
+};
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>DETROIT UNDERGROUND</Text>
-        <Text style={styles.subtitle}>MOBILE HUB</Text>
-      </View>
-      <View style={styles.content}>
-        <Text style={styles.text}>Connecting to backend API...</Text>
-      </View>
+    <NavigationContainer theme={DetroitDarkTheme}>
       <StatusBar style="light" />
-    </SafeAreaView>
+      <Tab.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: '#111' },
+          headerTitleStyle: { fontWeight: '900', letterSpacing: 2 },
+          tabBarActiveTintColor: '#39ff14',
+          tabBarInactiveTintColor: '#888',
+          tabBarStyle: { borderTopColor: '#333' }
+        }}
+      >
+        <Tab.Screen name="Feed" component={FeedScreen} options={{ title: 'THE HUB' }} />
+        <Tab.Screen name="Map" component={MapScreen} options={{ title: 'RADAR' }} />
+        <Tab.Screen name="Store" component={MarketplaceScreen} options={{ title: 'EXCHANGE' }} />
+        <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'ID' }} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  header: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333',
-    alignItems: 'center',
-  },
-  title: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: '900',
-    letterSpacing: 2,
-  },
-  subtitle: {
-    color: '#39ff14', // neon green from web app
-    fontSize: 12,
-    fontWeight: 'bold',
-    letterSpacing: 4,
-    marginTop: 5,
-  },
-  content: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: '#888',
-    fontSize: 16,
-  }
-});
