@@ -1,8 +1,11 @@
 # CHANGELOG
 
-## [v1.9.0] - In Progress
-- Implementing Admin Governance dashboard.
-- Implementing Blockchain Merch minting integrations.
+## [v2.0.0] - In Progress
+- Initializing React Native Expo mobile wrapper in the `/mobile` directory to interface with the Next.js API.
+
+## [v1.9.0]
+- Added Admin Governance dashboard and backend routes.
+- Added blockchain integration (ethers.js mock) for limited vinyl minting.
 
 ## [v1.8.0]
 - Added Dynamic Native Ticketing (simulated Stripe checkout).
