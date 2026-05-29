@@ -17,4 +17,4 @@ Major structural milestones:
 ## Phase 2: Mobile Port
 - [x] Initialize Expo / React Native scaffolding.
 - [x] Build mobile navigation UI.
-- [ ] Hook mobile UI to Next.js API layer.
+- [x] Hook mobile UI to Next.js API layer.

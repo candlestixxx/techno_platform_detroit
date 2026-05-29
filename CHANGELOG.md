@@ -1,6 +1,13 @@
 # CHANGELOG
 
-## [v2.0.0] - In Progress
+## [v2.2.0]
+- Connected React Native mobile app screens (Feed, Map) to the Next.js API layer.
+- Finalized Phase 2 roadmap tasks.
+
+## [v2.1.0]
+- Setup React Navigation bottom tabs in the Expo mobile app.
+
+## [v2.0.0]
 - Initializing React Native Expo mobile wrapper in the `/mobile` directory to interface with the Next.js API.
 
 ## [v1.9.0]
