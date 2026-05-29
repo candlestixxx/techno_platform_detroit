@@ -18,3 +18,7 @@ Major structural milestones:
 - [x] Initialize Expo / React Native scaffolding.
 - [x] Build mobile navigation UI.
 - [x] Hook mobile UI to Next.js API layer.
+
+## Phase 3: Mobile Hardening
+- [x] Implement Mobile Authentication Flow (JWT).
+- [ ] Implement Expo Push Notifications.

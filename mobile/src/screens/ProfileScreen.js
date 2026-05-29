@@ -1,30 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TextInput, TouchableOpacity } from 'react-native';
 
 const API_URL = 'http://10.0.2.2:3000';
 
 export default function ProfileScreen() {
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [authToken, setAuthToken] = useState(null);
 
-  useEffect(() => {
-    // Note: In a real mobile app, you would pass an auth token (JWT) in headers.
-    // Since this scaffold relies on NextAuth browser cookies, we simulate fetching profile data
-    // by falling back to a mock rendering if a 401 is encountered locally.
-    fetch(`${API_URL}/api/profile`)
-      .then(res => {
-        if (res.status === 401) {
-            // Return mock data for the scaffold viewer
-            return {
-                name: "Mobile User",
-                email: "mobile@detroitunderground.com",
-                role: "USER",
-                tickets: [
-                    { id: '1', event: { title: "Movement Pre-Party", date: new Date().toISOString() }, status: "VALID", qrCode: "MOCKQR" }
-                ],
-                subscriptions: []
-            };
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const fetchProfile = (token) => {
+    setLoading(true);
+    fetch(`${API_URL}/api/profile`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
         }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Unauthorized');
         return res.json();
       })
       .then(data => {
@@ -33,9 +29,34 @@ export default function ProfileScreen() {
       })
       .catch(err => {
         console.error(err);
+        setAuthToken(null);
         setLoading(false);
       });
-  }, []);
+  };
+
+  const handleLogin = async () => {
+      setLoading(true);
+      setError('');
+      try {
+          const res = await fetch(`${API_URL}/api/auth/mobile-login`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (data.token) {
+              setAuthToken(data.token);
+              // In a real app, save token to AsyncStorage / SecureStore
+              fetchProfile(data.token);
+          } else {
+              setError(data.error || 'Login failed');
+              setLoading(false);
+          }
+      } catch (err) {
+          setError('Network error');
+          setLoading(false);
+      }
+  };
 
   if (loading) {
     return (
@@ -43,6 +64,34 @@ export default function ProfileScreen() {
         <ActivityIndicator size="large" color="#39ff14" />
       </View>
     );
+  }
+
+  if (!authToken || !profile) {
+      return (
+        <View style={styles.center}>
+            <Text style={styles.sectionHeader}>MOBILE HUB LOGIN</Text>
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            <TextInput
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor="#666"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Password"
+                placeholderTextColor="#666"
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+            />
+            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+                <Text style={styles.loginBtnText}>ACCESS NETWORK</Text>
+            </TouchableOpacity>
+        </View>
+      )
   }
 
   return (
@@ -80,13 +129,21 @@ export default function ProfileScreen() {
       ) : (
           <Text style={styles.empty}>No fan club subscriptions active.</Text>
       )}
+
+      <TouchableOpacity style={[styles.loginBtn, {marginTop: 40, backgroundColor: '#333'}]} onPress={() => { setAuthToken(null); setProfile(null); }}>
+          <Text style={[styles.loginBtnText, {color: '#888'}]}>DISCONNECT</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#000', padding: 15 },
-  center: { flex: 1, backgroundColor: '#000', alignItems: 'center', justifyContent: 'center' },
+  center: { flex: 1, backgroundColor: '#000', alignItems: 'center', justifyContent: 'center', padding: 20 },
+  input: { width: '100%', backgroundColor: '#111', color: '#fff', padding: 15, borderRadius: 5, marginBottom: 15, borderWidth: 1, borderColor: '#333' },
+  loginBtn: { width: '100%', backgroundColor: '#39ff14', padding: 15, borderRadius: 5, alignItems: 'center' },
+  loginBtnText: { color: '#000', fontWeight: '900', letterSpacing: 2 },
+  errorText: { color: '#ff3333', marginBottom: 15, fontWeight: 'bold' },
   headerBlock: { alignItems: 'center', marginBottom: 30, borderBottomWidth: 1, borderBottomColor: '#222', paddingBottom: 20 },
   avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#111', borderWidth: 2, borderColor: '#39ff14', alignItems: 'center', justifyContent: 'center', marginBottom: 10 },
   avatarText: { color: '#888', fontSize: 30, fontWeight: 'bold' },

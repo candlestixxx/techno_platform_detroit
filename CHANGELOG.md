@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [v3.0.0] - In Progress
+- Implementing mobile authentication utilizing JWTs.
+
 ## [v2.3.0]
 - Connected React Native mobile app screens (Marketplace, Profile) to the Next.js API layer.
 - Added mock JWT bypass logic to the React Native profile screen for local scaffolding without NextAuth web cookies.

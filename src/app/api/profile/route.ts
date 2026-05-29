@@ -5,13 +5,29 @@ import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function GET(request: Request) {
   try {
+    let userId = null;
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user || !(session.user as any).id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (session && session.user && (session.user as any).id) {
+        userId = (session.user as any).id;
+    } else {
+        // Fallback for Mobile JWTs
+        const authHeader = request.headers.get("authorization");
+        if (authHeader && authHeader.startsWith("Bearer ")) {
+            const token = authHeader.split(" ")[1];
+            try {
+                const jwt = require("jsonwebtoken");
+                const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET || "fallback_secret_for_local_scaffolding");
+                userId = decoded.id;
+            } catch (err) {
+                return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+            }
+        }
     }
 
-    const userId = (session.user as any).id;
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
