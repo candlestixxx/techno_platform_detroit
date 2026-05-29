@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v2.3.0]
+- Connected React Native mobile app screens (Marketplace, Profile) to the Next.js API layer.
+- Added mock JWT bypass logic to the React Native profile screen for local scaffolding without NextAuth web cookies.
+
 ## [v2.2.0]
 - Connected React Native mobile app screens (Feed, Map) to the Next.js API layer.
 - Finalized Phase 2 roadmap tasks.
