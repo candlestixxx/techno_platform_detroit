@@ -19,6 +19,8 @@ model User {
   password        String?
   role            UserRole  @default(USER)
   stripeAccountId String?
+  isAdmin         Boolean   @default(false)
+  isApproved      Boolean   @default(true) // For governing businesses/artists
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
@@ -89,6 +91,7 @@ model Product {
   updatedAt   DateTime     @updatedAt
   delivery    DeliveryType @default(SHIPPED)
   qrCode      String?
+  txHash      String?      // Blockchain mint transaction hash for limited vinyl
   redemptions CouponRedemption[]
 }
 
@@ -160,6 +163,7 @@ model Event {
   source       String // 'RA', 'Tectroit', 'Movement', 'Manual'
   originalLink String?
   image        String?
+  isFlagged    Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -185,6 +189,7 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   embedUrl  String?
+  isFlagged Boolean  @default(false)
 }
 
 enum PostType {

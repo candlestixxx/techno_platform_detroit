@@ -1,54 +1,27 @@
-# CHANGELOG.md
+# CHANGELOG
 
-## v1.1.0 (Current)
-- Introduced gamified "Geolocation Scan" UI to unlock Digital Coupons when claiming marketplace drops from local businesses.
+## [v1.9.0] - In Progress
+- Implementing Admin Governance dashboard.
+- Implementing Blockchain Merch minting integrations.
 
-## v1.0.0
-- Prepared final V1 release structure for Detroit Underground.
-- Refactored internal API route ES6 imports to strict top-of-file guidelines to resolve final code review nitpicks.
+## [v1.8.0]
+- Added Dynamic Native Ticketing (simulated Stripe checkout).
+- Updated user profile to surface generated QR codes for event tickets.
 
-## v0.9.0
-- Added authenticated POST endpoint for users to create new feed broadcasts in `/api/feed/route.ts`.
-- Integrated a real-time post creation form UI exclusively visible to authenticated users in `HybridSocialFeed.tsx`.
+## [v1.7.0]
+- Added AI Recommendation Agent using LiteLLM.
 
-## v0.8.0
-- Prepared repository for Vercel production deployment (`DEPLOY.md`).
-- Implemented GitHub Actions CI workflow to run tests, linting, and builds automatically.
+## [v1.6.0]
+- Migrated event chat from short-polling to socket.io WebSockets via custom server.js.
 
-## v0.7.0
-- Configured Edge Caching Headers (`Cache-Control`) on aggregate API endpoints to prevent rate limit blocks.
-- Setup Playwright End-to-End browser UI testing suite.
+## [v1.4.0]
+- Added User Profile tracking interface for Subscriptions and Promo claims.
 
-## v0.6.0
-- Upgraded `UndergroundMap.tsx` marker placement to explicitly utilize the `event.coordinates` property queried from the live scraping APIs.
-- Built independent frontend profile routing (`/artist/[id]`) for specific Artists/Businesses to showcase their posts and marketplace products.
+## [v1.3.0]
+- Implemented Push Notifications via Service Workers.
 
-## v0.5.0
-- Removed fallback mock scrapers, fully relying on `axios`/`cheerio` live DOM parsing for production event aggregators.
-- Implemented `/api/llm` API route proxy intended to interface with the locally configured `litellm` python instance for data summarizations and venue analytics.
+## [v1.2.0]
+- Added Artist Subscriptions & Business Analytics Dashboard.
 
-## v0.4.0
-- Added Stripe Connect Onboarding API (`/api/stripe/onboard`).
-- Finalized Stripe Checkout API to distribute platform fees and transfer payments to connected `stripeAccountId`.
-- Updated User Prisma schema to support `stripeAccountId`.
-
-## v0.3.0
-- Configured Google and GitHub OAuth providers within `next-auth`.
-- Updated authentication UI with OAuth login buttons.
-
-## v0.2.0
-- Implemented live HTML scrapers (Axios/Cheerio) and RA.co GraphQL fetcher.
-- Optimized Mapbox UI for mobile devices (drag handles, sliding drawers).
-- Implemented Stripe Checkout flow mock API.
-- Implemented `next-auth` JWT architecture for User/Artist profiles.
-- Resolved Next.js SSR crashes with dynamic Mapbox loading.
-- Bumped and purged Prisma back to v5.x due to build constructor errors in v7.
-
-## v0.1.0
-- Scaffolding of Next.js architecture.
-- Implementation of Prisma Schema.
-- Creation of Mapbox interactive component.
-- Creation of Hybrid Social Feed.
-- Implementation of Market Place UI and API route.
-- Creation of Mock Aggregator framework and tests.
-- Creation of global documentation (VISION, MEMORY, DEPLOY, IDEAS, ROADMAP, TODO).
+## [v1.1.0]
+- Setup Next.js, Mapbox, Hybrid Social Feed, Marketplace Mock, Aggregator Scrapers.

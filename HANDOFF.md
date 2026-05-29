@@ -1,17 +1,17 @@
 # HANDOFF.md
 
-## Session Summary (v1.8.0)
+## Session Summary (v1.9.0)
 
-In this session, the Detroit Underground Hub integrated native dynamic ticketing, executing yet another pivot from the ideation backlog.
+In this session, the Detroit Underground Hub incorporated the final two major structural elements from the backlog: Admin Governance and Blockchain Merchandise.
 
 ### Key Milestones Achieved:
-1. **Dynamic Ticketing Schema:** Added a `Ticket` data model to Prisma bridging `User` and `Event` relations with QR code generation.
-2. **Checkout Integration:** Created a dedicated `/api/tickets/purchase` route simulating a native Stripe transaction checkout specifically for events rather than physical/digital marketplace merchandise.
-3. **Profile Updates:** Updated the `/profile` dashboard and `/api/profile` backend to explicitly group Event Tickets alongside Promotional claims, rendering their validity status and QR identifiers for the user.
+1. **Admin Governance:** Added `isAdmin`, `isApproved`, and `isFlagged` fields to the Prisma schema. Built `/api/admin` and the frontend `/admin` dashboard for superusers to pardon/delete flagged posts and approve new business vendor accounts.
+2. **Blockchain Merch:** Integrated `ethers.js` to build `/api/blockchain/mint`. This route allows Artists to "mint" their `LIMITED_VINYL` marketplace products to a blockchain, saving the generated transaction hash to the database for verifiable ownership.
 
 ### Notes for Next Model/Developer:
-- **Ticketing QR Codes:** The current implementation generates a plaintext string ID for the QR code `(TKT-...)`. In a production scenario serving a door-person's scanner app, these should be securely signed JWTs or encrypted payloads.
+- **Blockchain Mock:** The `ethers.js` implementation currently relies on a simulated timeout and a randomized `ethers.hexlify` payload. For production, supply an `ETH_RPC_URL`, private key, and ABI to connect to a real testnet/mainnet.
+- **Admin Access:** The first user in the database must have their `isAdmin` boolean manually set to `true` via a direct database query in order to bootstrap the admin portal.
 - **Testing:** The system remains incredibly stable. All Playwright and Jest tests have passed.
-- **Ideation:** `IDEAS.md` has been updated to reflect the completion of the Dynamic Ticketing pivot. Only React Native and Blockchain integration ideas remain.
+- **Ideation:** The only remaining concept in `IDEAS.md` is a React Native mobile application wrapper, which would require an entirely separate repository and tech stack.
 
-End of session handoff successfully prepared.
+End of session handoff successfully prepared. The `ROADMAP.md` is now 100% finished.

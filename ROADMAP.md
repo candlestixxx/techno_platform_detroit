@@ -8,3 +8,8 @@ Major structural milestones:
 - [x] Future: Enhance marketplace with subscription logic for artist fan clubs.
 - [x] Future: Add advanced analytics dashboard for businesses to track digital coupon conversions.
 - [x] Future: Implement push notifications for real-time event updates and chat.
+- [x] Future: Mobile Native Wrapper / WebSockets.
+- [x] Future: Dynamic Native Ticketing.
+- [x] Future: AI Recommendation Agent.
+- [x] Future: Admin Governance Dashboard.
+- [x] Future: Blockchain Merch Verification.
