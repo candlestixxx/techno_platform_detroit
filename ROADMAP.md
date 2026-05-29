@@ -21,4 +21,4 @@ Major structural milestones:
 
 ## Phase 3: Mobile Hardening
 - [x] Implement Mobile Authentication Flow (JWT).
-- [ ] Implement Expo Push Notifications.
+- [x] Implement Expo Push Notifications.

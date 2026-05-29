@@ -21,6 +21,7 @@ model User {
   stripeAccountId String?
   isAdmin         Boolean   @default(false)
   isApproved      Boolean   @default(true) // For governing businesses/artists
+  expoPushToken   String?   // For React Native push notifications
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 

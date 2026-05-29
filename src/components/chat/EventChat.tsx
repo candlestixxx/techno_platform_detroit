@@ -86,7 +86,8 @@ export default function EventChat({ eventId }: { eventId: string }) {
 
         // Broadcast over WebSocket
         if (socket) {
-          socket.emit("send_message", { ...data.message, eventId });
+          // Send the message payload explicitly appending the authorId to pass the server-side IDOR check
+          socket.emit("send_message", { ...data.message, eventId, authorId: (session.user as any).id });
         }
       }
     } catch (error) {

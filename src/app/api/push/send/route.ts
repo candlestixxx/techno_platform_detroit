@@ -16,9 +16,24 @@ if (vapidPublicKey !== "dummy_public_key" && vapidPrivateKey !== "dummy_private_
   console.warn("Push notifications disabled in development without VAPID keys.");
 }
 
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../auth/[...nextauth]/route";
+
 export async function POST(request: Request) {
   try {
-    // Note: In a real app, this should be a protected admin route or triggered server-side.
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user || !(session.user as any).id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = (session.user as any).id;
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user || !user.isAdmin) {
+      return NextResponse.json({ error: "Forbidden: Admin access only." }, { status: 403 });
+    }
+
     const body = await request.json();
     const { message, title, targetUserId } = body;
 

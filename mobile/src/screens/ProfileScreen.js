@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TextInput, TouchableOpacity, Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 
 const API_URL = 'http://10.0.2.2:3000';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function ProfileScreen() {
   const [profile, setProfile] = useState(null);
@@ -11,6 +22,67 @@ export default function ProfileScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const checkToken = async () => {
+        try {
+            const storedToken = await AsyncStorage.getItem('@auth_token');
+            if (storedToken) {
+                setAuthToken(storedToken);
+                fetchProfile(storedToken);
+            } else {
+                setLoading(false);
+            }
+        } catch (e) {
+            setLoading(false);
+        }
+    }
+    checkToken();
+  }, []);
+
+  const registerForPushNotificationsAsync = async (token) => {
+    let pushToken;
+
+    if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#39ff14',
+      });
+    }
+
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      try {
+        const projectId = "detroit-underground"; // Replace with Expo project ID in prod
+        pushToken = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
+
+        // Register token with backend
+        await fetch(`${API_URL}/api/push/expo-register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ expoPushToken: pushToken })
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      console.warn('Must use physical device for Push Notifications');
+    }
+  };
 
   const fetchProfile = (token) => {
     setLoading(true);
@@ -46,8 +118,9 @@ export default function ProfileScreen() {
           const data = await res.json();
           if (data.token) {
               setAuthToken(data.token);
-              // In a real app, save token to AsyncStorage / SecureStore
+              await AsyncStorage.setItem('@auth_token', data.token);
               fetchProfile(data.token);
+              registerForPushNotificationsAsync(data.token);
           } else {
               setError(data.error || 'Login failed');
               setLoading(false);
@@ -130,7 +203,11 @@ export default function ProfileScreen() {
           <Text style={styles.empty}>No fan club subscriptions active.</Text>
       )}
 
-      <TouchableOpacity style={[styles.loginBtn, {marginTop: 40, backgroundColor: '#333'}]} onPress={() => { setAuthToken(null); setProfile(null); }}>
+      <TouchableOpacity style={[styles.loginBtn, {marginTop: 40, backgroundColor: '#333'}]} onPress={async () => {
+          setAuthToken(null);
+          setProfile(null);
+          await AsyncStorage.removeItem('@auth_token');
+      }}>
           <Text style={[styles.loginBtnText, {color: '#888'}]}>DISCONNECT</Text>
       </TouchableOpacity>
     </ScrollView>

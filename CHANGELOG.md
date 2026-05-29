@@ -1,6 +1,11 @@
 # CHANGELOG
 
-## [v3.0.0] - In Progress
+## [v3.1.0]
+- Added Expo Push Notification registration endpoint (`/api/push/expo-register`).
+- Added `expoPushToken` to Prisma schema.
+- Finalized Phase 3 roadmap tasks.
+
+## [v3.0.0]
 - Implementing mobile authentication utilizing JWTs.
 
 ## [v2.3.0]
