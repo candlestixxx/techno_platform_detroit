@@ -39,3 +39,13 @@ jobs:
 
     - name: Build Next.js Application
       run: npm run build
+
+  docker-verify:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Verify Docker Build
+      run: docker build -t detroit-underground-hub:test .

@@ -1,35 +1,34 @@
-# DEPLOY.md
+# DEPLOYMENT GUIDE
 
-Latest deployment and environment setup instructions for Vercel.
+## Phase 4: Production Containerization
 
-## Local Development
-1. Ensure Node.js 18+ and npm are installed.
-2. Install dependencies: `npm install`
-3. Configure PostgreSQL database and set `DATABASE_URL` in `.env`.
-4. Run migrations: `npx prisma migrate dev`
-5. Generate Prisma Client: `npx prisma generate`
-6. Build project: `npm run build`
-7. Start server: `npm start`
+The Detroit Underground Hub has evolved beyond Vercel serverless edge compatibility due to the implementation of a custom Next.js `server.js` wrapper which powers long-running real-time Socket.io WebSockets.
 
-## Vercel Production Deployment
+To deploy the application securely and scalably, it must now be orchestrated via Docker.
 
-### 1. Database Connection Pooling
-Serverless functions (like Vercel Edge/Node functions) can exhaust database connections rapidly. You **must** utilize a connection pooler.
-- If using **Supabase**: Use the Transaction pooler URL (runs on port 6543) for `DATABASE_URL`, and append `?pgbouncer=true`. Keep the direct connection URL (port 5432) for `DIRECT_URL`.
-- If using **Prisma Accelerate**: Replace standard connection string with your Accelerate URL.
+### Requirements
+- Docker
+- Docker Compose
 
-### 2. Required Environment Variables
-Add these to your Vercel Project Settings:
-- `DATABASE_URL`: Connection string (with pooling configured).
-- `DIRECT_URL`: Direct database connection for running schema migrations during build.
-- `NEXT_PUBLIC_MAPBOX_TOKEN`: Active Mapbox GL API key.
-- `NEXTAUTH_SECRET`: Random 32+ character string (generate via `openssl rand -base64 32`).
-- `NEXTAUTH_URL`: The canonical URL of your Vercel deployment (e.g., `https://detroit-underground.vercel.app`).
-- `STRIPE_SECRET_KEY`: Active Stripe secret key (start with `sk_test_` during staging).
-- `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET`: From Google Cloud Console OAuth setup.
-- `GITHUB_CLIENT_ID` & `GITHUB_CLIENT_SECRET`: From GitHub Developer Settings.
+### Startup
+1. Ensure your `.env` variables are correctly mapped inside your hosting environment (Stripe, VAPID, NextAuth Secret, Database URL).
+2. From the root repository, execute:
+   ```bash
+   docker-compose up --build -d
+   ```
+3. The cluster will spin up a fresh PostgreSQL `15-alpine` database and the Next.js `standalone` production build, mapping traffic to port `3000`.
 
-### 3. Build Configuration
-Vercel should automatically detect Next.js.
-- **Build Command**: `npx prisma generate && npx prisma migrate deploy && next build`
-- **Install Command**: `npm install`
+### Database Migrations
+Once the cluster is running, you must synchronize the Prisma schema into the new PostgreSQL container:
+```bash
+docker-compose exec web npx prisma migrate deploy
+```
+
+### Scraping Cron Jobs
+Because the system is no longer hosted on Vercel, the `vercel.json` cron architecture is inactive. You must setup a system-level cron job on your host machine to periodically ping the aggregation route:
+```bash
+0 2 * * * curl -X GET http://localhost:3000/api/cron/sync-events -H "Authorization: Bearer YOUR_CRON_SECRET"
+```
+
+### CI/CD Integration
+The `.github/workflows/main.yml` pipeline has been updated to automatically verify the `Dockerfile` build on every PR. In a production environment, this workflow should be extended to push the validated image to a registry (e.g., AWS ECR or Docker Hub) and trigger a deployment webhook on your target VPS.
