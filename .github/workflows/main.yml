@@ -1,4 +1,4 @@
-name: Detroit Underground CI
+name: CI/CD Pipeline
 
 on:
   push:
@@ -10,32 +10,55 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/detroit_test?schema=public"
+      NEXTAUTH_SECRET: "mock_secret_for_ci"
+      NEXT_PUBLIC_MAPBOX_TOKEN: "pk.mock_token"
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: detroit_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - uses: actions/checkout@v4
 
-    - name: Use Node.js
+    - name: Use Node.js 20
       uses: actions/setup-node@v4
       with:
-        node-version: '20.x'
+        node-version: '20'
         cache: 'npm'
 
-    - name: Install dependencies
+    - name: Install Dependencies
       run: npm ci
 
     - name: Generate Prisma Client
       run: npx prisma generate
 
-    - name: Run ESLint
+    - name: Run Prisma Migrations
+      run: npx prisma migrate dev --name init
+
+    - name: Run Linter
       run: npm run lint
 
-    - name: Run Jest Unit Tests
+    - name: Run Unit Tests
       run: npm test
 
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps chromium
-
-    - name: Run Playwright E2E Tests
-      run: npx playwright test
+      run: npx playwright install --with-deps
 
     - name: Build Next.js Application
       run: npm run build
+
+    - name: Run Playwright E2E Tests
+      run: npx playwright test
