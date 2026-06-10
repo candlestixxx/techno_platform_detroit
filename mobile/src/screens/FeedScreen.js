@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-nativ
 
 // Use local machine IP or production domain.
 // 10.0.2.2 is the standard Android emulator alias for localhost.
-const API_URL = 'http://10.0.2.2:3000';
+import config from '../config';
+const API_URL = config.API_URL;
 
 export default function FeedScreen() {
   const [feed, setFeed] = useState([]);

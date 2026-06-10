@@ -24,12 +24,17 @@ export async function GET(request: Request) {
       include: { author: { select: { name: true, email: true } } }
     });
 
+    // Fetch flagged events
+    const flaggedEvents = await prisma.event.findMany({
+      where: { isFlagged: true }
+    });
+
     // Fetch unapproved businesses
     const unapprovedBusinesses = await prisma.user.findMany({
       where: { isApproved: false, role: "BUSINESS" }
     });
 
-    return NextResponse.json({ flaggedPosts, unapprovedBusinesses });
+    return NextResponse.json({ flaggedPosts, flaggedEvents, unapprovedBusinesses });
 
   } catch (error: any) {
     console.error("Admin Error:", error);
@@ -61,6 +66,12 @@ export async function POST(request: Request) {
     } else if (action === "unflag_post") {
         await prisma.post.update({ where: { id: targetId }, data: { isFlagged: false } });
         return NextResponse.json({ success: true, message: "Post unflagged." });
+    } else if (action === "delete_event") {
+        await prisma.event.delete({ where: { id: targetId } });
+        return NextResponse.json({ success: true, message: "Event deleted." });
+    } else if (action === "unflag_event") {
+        await prisma.event.update({ where: { id: targetId }, data: { isFlagged: false } });
+        return NextResponse.json({ success: true, message: "Event unflagged." });
     }
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });

@@ -10,7 +10,13 @@ export async function GET(request: Request) {
       take: 100, // Limit to 100 events for map performance
     });
 
-    return NextResponse.json(events);
+    const formattedEvents = events.map(event => ({
+      ...event,
+      lineup: typeof event.lineup === 'string' ? JSON.parse(event.lineup) : event.lineup,
+      coordinates: typeof event.coordinates === 'string' ? JSON.parse(event.coordinates) : event.coordinates,
+    }));
+
+    return NextResponse.json(formattedEvents);
   } catch (error) {
     console.error("Failed to fetch events:", error);
     return NextResponse.json({ error: "Failed to fetch events" }, { status: 500 });

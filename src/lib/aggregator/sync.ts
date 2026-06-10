@@ -41,7 +41,7 @@ export async function syncEvents() {
           lineup: event.lineup,
           source: event.source,
           isAfterparty: event.isAfterparty,
-          coordinates: event.coordinates ? event.coordinates : undefined,
+          coordinates: event.coordinates ? (event.coordinates as any) : undefined,
           originalLink: event.originalLink,
         },
       });

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 
-const API_URL = 'http://10.0.2.2:3000';
+import config from '../config';
+const API_URL = config.API_URL;
 
 export default function MapScreen() {
   const [events, setEvents] = useState([]);

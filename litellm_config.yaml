@@ -11,6 +11,6 @@ model_list:
 - model_name: qwen/qwen3-coder:free
   litellm_params:
     model: openrouter/qwen/qwen3-coder:free
-- model_name: nvidia/nemotron-3-ultra-550b-a55b:free
+- model_name: nvidia/nemotron-3-super-120b-a12b:free
   litellm_params:
-    model: openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
+    model: openrouter/nvidia/nemotron-3-super-120b-a12b:free

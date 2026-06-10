@@ -40,6 +40,28 @@ export default function ProfilePage() {
     }
   }, [status]);
 
+  const handleMint = async (productId: string) => {
+    try {
+      const res = await fetch("/api/blockchain/mint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        alert(`Successfully minted! Tx Hash: ${data.txHash}`);
+        // Refresh profile data
+        window.location.reload();
+      } else {
+        const err = await res.json();
+        alert(err.error || "Minting failed.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred during minting.");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-black text-white">
@@ -132,6 +154,45 @@ export default function ProfilePage() {
           )}
         </section>
       </div>
+
+      {/* Manage Catalog Section for Artists/Businesses */}
+      {profileData?.products && profileData.products.length > 0 && (
+        <section className="mt-8 bg-zinc-950 border border-emerald-900/50 p-6 rounded-xl shadow-lg">
+          <h2 className="text-2xl font-bold mb-6 font-mono text-white flex items-center">
+             <span className="bg-emerald-500 w-2 h-6 mr-3 inline-block"></span>
+             Manage Catalog
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {profileData.products.map((product: any) => (
+              <div key={product.id} className="bg-zinc-900 p-4 rounded-lg border border-zinc-800">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold text-emerald-400">{product.title}</h3>
+                  <span className="text-[10px] bg-zinc-800 px-2 py-0.5 rounded text-zinc-400 uppercase">{product.type}</span>
+                </div>
+                <p className="text-xs text-zinc-500 mb-4 line-clamp-2">{product.description}</p>
+
+                {product.type === "LIMITED_VINYL" && (
+                  <div className="mt-auto pt-4 border-t border-zinc-800">
+                    {product.txHash ? (
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] text-zinc-500 uppercase font-bold">Blockchain Status: Minted</span>
+                        <code className="text-[9px] text-emerald-500 bg-black p-1 rounded break-all">{product.txHash}</code>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => handleMint(product.id)}
+                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase py-2 rounded transition-colors"
+                      >
+                        Mint Limited Edition NFT
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* AI Recommendations Section */}
       <section className="mt-8 bg-zinc-950 border border-purple-900/50 p-6 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.1)]">

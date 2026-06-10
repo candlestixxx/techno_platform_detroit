@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
-  const [data, setData] = useState<any>({ flaggedPosts: [], unapprovedBusinesses: [] });
+  const [data, setData] = useState<any>({ flaggedPosts: [], flaggedEvents: [], unapprovedBusinesses: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -98,6 +98,26 @@ export default function AdminDashboard() {
                  </div>
                ))}
              </div>
+          )}
+        </section>
+
+        <section className="bg-zinc-950 border border-yellow-900/50 p-6 rounded shadow-lg">
+          <h2 className="text-xl font-bold font-mono text-yellow-500 mb-4 border-b border-zinc-800 pb-2">Flagged Events</h2>
+          {data.flaggedEvents.length === 0 ? (
+            <p className="text-zinc-500 italic">No flagged events.</p>
+          ) : (
+            <div className="space-y-4">
+              {data.flaggedEvents.map((event: any) => (
+                <div key={event.id} className="bg-zinc-900 p-4 rounded border border-zinc-800">
+                   <p className="font-bold text-yellow-500">{event.title}</p>
+                   <p className="text-xs text-zinc-400 mb-2">{event.venue} | {new Date(event.date).toLocaleDateString()}</p>
+                   <div className="flex gap-2">
+                     <button onClick={() => handleAction("unflag_event", event.id)} className="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-sm font-bold uppercase rounded transition">Pardon</button>
+                     <button onClick={() => handleAction("delete_event", event.id)} className="px-3 py-1 bg-red-900 hover:bg-red-800 text-sm font-bold uppercase rounded transition text-red-200">Delete</button>
+                   </div>
+                </div>
+              ))}
+            </div>
           )}
         </section>
       </div>

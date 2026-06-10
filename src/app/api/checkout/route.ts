@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 // Mock stripe initialization since we don't have a real key in this environment.
 // In a real application, this would be: new Stripe(process.env.STRIPE_SECRET_KEY!, { ... })
@@ -10,6 +12,9 @@ const stripe = new Stripe("sk_test_mock123", {
 
 export async function POST(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    const userId = (session?.user as any)?.id;
+
     const { productId, quantity = 1 } = await request.json();
 
     if (!productId) {
@@ -56,6 +61,10 @@ export async function POST(request: Request) {
       mode: 'payment',
       success_url: `${request.headers.get("origin")}/marketplace?success=true`,
       cancel_url: `${request.headers.get("origin")}/marketplace?canceled=true`,
+      metadata: {
+        productId: product.id,
+        userId: userId || "anonymous"
+      }
     };
 
     // If the seller has a connected account, transfer the funds
@@ -68,9 +77,9 @@ export async function POST(request: Request) {
       };
     }
 
-    const session = await stripe.checkout.sessions.create(sessionPayload);
+    const checkoutSession = await stripe.checkout.sessions.create(sessionPayload);
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: checkoutSession.url });
 
   } catch (error: any) {
     console.error("Stripe Error:", error);

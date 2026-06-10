@@ -4,7 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 
-const API_URL = 'http://10.0.2.2:3000';
+import config from '../config';
+const API_URL = config.API_URL;
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

@@ -32,6 +32,7 @@ export async function GET(request: Request) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
+        products: true,
         subscriptions: {
           include: {
             tier: {
