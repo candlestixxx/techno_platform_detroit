@@ -1,0 +1,16 @@
+model_list:
+- model_name: openrouter/owl-alpha
+  litellm_params:
+    model: openrouter/openrouter/owl-alpha
+- model_name: google/lyria-3-pro-preview
+  litellm_params:
+    model: openrouter/google/lyria-3-pro-preview
+- model_name: google/lyria-3-clip-preview
+  litellm_params:
+    model: openrouter/google/lyria-3-clip-preview
+- model_name: qwen/qwen3-coder:free
+  litellm_params:
+    model: openrouter/qwen/qwen3-coder:free
+- model_name: nvidia/nemotron-3-super-120b-a12b:free
+  litellm_params:
+    model: openrouter/nvidia/nemotron-3-super-120b-a12b:free
