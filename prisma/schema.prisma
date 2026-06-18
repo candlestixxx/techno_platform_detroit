@@ -25,16 +25,16 @@ model User {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
-  accounts      Account[]
-  sessions      Session[]
-  products      Product[]
-  posts         Post[]
-  topics        ForumTopic[]
-  replies       ForumReply[]
-  eventMessages EventMessage[]
-  subscriptions Subscription[] @relation("Subscriber")
-  artistTiers   SubscriptionTier[] @relation("Artist")
-  redemptions   CouponRedemption[]
+  accounts          Account[]
+  sessions          Session[]
+  products          Product[]
+  posts             Post[]
+  topics            ForumTopic[]
+  replies           ForumReply[]
+  eventMessages     EventMessage[]
+  subscriptions     Subscription[]     @relation("Subscriber")
+  artistTiers       SubscriptionTier[] @relation("Artist")
+  redemptions       CouponRedemption[]
   pushSubscriptions PushSubscription[]
 }
 
@@ -74,7 +74,7 @@ model VerificationToken {
 }
 
 model Product {
-  id          String       @id @default(uuid())
+  id          String             @id @default(uuid())
   title       String
   description String
   price       Float
@@ -85,20 +85,20 @@ model Product {
   updatedAt   DateTime     @updatedAt
   delivery    String       @default("SHIPPED")
   qrCode      String?
-  txHash      String?      // Blockchain mint transaction hash for limited vinyl
+  txHash      String? // Blockchain mint transaction hash for limited vinyl
   redemptions CouponRedemption[]
 }
 
 model SubscriptionTier {
-  id          String   @id @default(uuid())
-  artistId    String
-  artist      User     @relation("Artist", fields: [artistId], references: [id])
-  name        String
-  description String
-  price       Float
+  id            String         @id @default(uuid())
+  artistId      String
+  artist        User           @relation("Artist", fields: [artistId], references: [id])
+  name          String
+  description   String
+  price         Float
   stripePriceId String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   subscriptions Subscription[]
 }
 
@@ -115,11 +115,11 @@ model Subscription {
 }
 
 model CouponRedemption {
-  id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  productId String
-  product   Product  @relation(fields: [productId], references: [id])
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
   redeemedAt DateTime @default(now())
 }
 

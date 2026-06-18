@@ -77,9 +77,9 @@ export async function POST(request: Request) {
       };
     }
 
-    const session = await stripe.checkout.sessions.create(sessionPayload);
+    const checkoutSession = await stripe.checkout.sessions.create(sessionPayload);
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: checkoutSession.url });
 
   } catch (error: any) {
     console.error("Stripe Error:", error);

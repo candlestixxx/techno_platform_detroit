@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [v4.0.0]
+- Resolved upstream merge conflicts via intelligent branching.
+- Synced local repository with remote tracking upstream changes.
+- Updated documentation and incremented project version.
+
 ## [v3.1.0]
 - Added Expo Push Notification registration endpoint (`/api/push/expo-register`).
 - Added `expoPushToken` to Prisma schema.
