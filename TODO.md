@@ -1,6 +1,7 @@
 # TODO.md
 
 Granular immediate tasks:
+- [x] Integrate Expo Push Notification sending logic (`expo-server-sdk`) with Admin Dashboard.
 - [x] Add `isAdmin` and `isApproved` flags to Prisma User model.
 - [x] Add `isFlagged` flag to Prisma Post and Event models.
 - [x] Create `/admin` frontend dashboard with moderation tables (Extended to include Flagged Events).
