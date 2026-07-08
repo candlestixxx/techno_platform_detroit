@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [v4.1.0]
+- Added `expo-server-sdk` for sending mobile push notifications.
+- Created `/api/push/expo-send` route to broadcast notifications.
+- Integrated Expo Push Notifications broadcast UI into the Admin Governance dashboard.
+
 ## [v4.0.0]
 - Resolved upstream merge conflicts via intelligent branching.
 - Synced local repository with remote tracking upstream changes.

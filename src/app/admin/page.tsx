@@ -9,6 +9,10 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [pushTitle, setPushTitle] = useState("");
+  const [pushMessage, setPushMessage] = useState("");
+  const [sendingPush, setSendingPush] = useState(false);
+
   const fetchData = async () => {
     try {
       const res = await fetch("/api/admin");
@@ -31,6 +35,32 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   }, [status]);
+
+  const handleSendPush = async () => {
+    if (!pushMessage.trim()) return alert("Message cannot be empty.");
+    setSendingPush(true);
+    try {
+      const res = await fetch("/api/push/expo-send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: pushTitle, message: pushMessage }),
+      });
+      if (res.ok) {
+        const result = await res.json();
+        alert(`Successfully sent to ${result.sent} devices.`);
+        setPushTitle("");
+        setPushMessage("");
+      } else {
+        const err = await res.json();
+        alert(err.error || "Failed to send push notification.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred while sending the push notification.");
+    } finally {
+      setSendingPush(false);
+    }
+  };
 
   const handleAction = async (action: string, targetId: string) => {
     try {
@@ -62,6 +92,39 @@ export default function AdminDashboard() {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <section className="bg-zinc-950 border border-purple-900/50 p-6 rounded shadow-lg">
+          <h2 className="text-xl font-bold font-mono text-purple-500 mb-4 border-b border-zinc-800 pb-2">Broadcast Push Notification (Mobile)</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-zinc-400 mb-1">Title (Optional)</label>
+              <input
+                type="text"
+                value={pushTitle}
+                onChange={(e) => setPushTitle(e.target.value)}
+                placeholder="Detroit Underground Hub"
+                className="w-full bg-zinc-900 border border-zinc-700 rounded p-2 text-white focus:outline-none focus:border-purple-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-zinc-400 mb-1">Message</label>
+              <textarea
+                value={pushMessage}
+                onChange={(e) => setPushMessage(e.target.value)}
+                placeholder="Enter notification message..."
+                className="w-full bg-zinc-900 border border-zinc-700 rounded p-2 text-white focus:outline-none focus:border-purple-500"
+                rows={3}
+              ></textarea>
+            </div>
+            <button
+              onClick={handleSendPush}
+              disabled={sendingPush}
+              className="px-4 py-2 bg-purple-900 hover:bg-purple-800 text-purple-200 font-bold uppercase rounded transition disabled:opacity-50"
+            >
+              {sendingPush ? "Broadcasting..." : "Broadcast to All Devices"}
+            </button>
+          </div>
+        </section>
+
         <section className="bg-zinc-950 border border-red-900/50 p-6 rounded shadow-lg">
           <h2 className="text-xl font-bold font-mono text-red-500 mb-4 border-b border-zinc-800 pb-2">Flagged Posts</h2>
           {data.flaggedPosts.length === 0 ? (
