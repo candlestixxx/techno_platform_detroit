@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     }
 
     const messages = [];
-    for (let u of users) {
+    for (const u of users) {
       if (!Expo.isExpoPushToken(u.expoPushToken)) {
         console.error(`Push token ${u.expoPushToken} is not a valid Expo push token`);
         continue;
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     const chunks = expo.chunkPushNotifications(messages);
     const tickets = [];
 
-    for (let chunk of chunks) {
+    for (const chunk of chunks) {
       try {
         const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
         tickets.push(...ticketChunk);
