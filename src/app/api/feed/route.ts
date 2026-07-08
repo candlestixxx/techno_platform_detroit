@@ -58,7 +58,7 @@ export async function GET(request: Request) {
           author: "DJ Minx",
           role: "ARTIST",
           content: "Detroit! Can't wait to see you at the afterparty tonight. 313 represent!",
-          createdAt: new Date().toISOString(),
+          createdAt: new Date() as any, // Using any because combinedFeed has Date from Prisma
           metadata: { embedUrl: "https://soundcloud.com/djminx" }
         },
         {
@@ -66,10 +66,10 @@ export async function GET(request: Request) {
           type: "EVENT_UPDATE",
           author: "RA",
           content: "Sample Event: Techno Underground at TV Lounge. Lineup: Kyle Hall, Anthony 'Shake' Shakir",
-          createdAt: new Date().toISOString(),
+          createdAt: new Date() as any,
           metadata: { 
             source: "RA", 
-            eventDate: new Date().toISOString(),
+            eventDate: new Date(),
             venue: "TV Lounge",
             link: "https://ra.co/events/123" 
           }
@@ -80,7 +80,8 @@ export async function GET(request: Request) {
           author: "Community Bot",
           role: "USER",
           content: "Welcome to Detroit Underground! Post your tracks, events, and gear here.",
-          createdAt: new Date().toISOString()
+          createdAt: new Date() as any,
+          metadata: undefined
         }
       ];
     }
