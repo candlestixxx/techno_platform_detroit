@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v4.2.0]
+- Added Edge Caching headers (`Cache-Control: public, s-maxage=60, stale-while-revalidate=120`) to `/api/events` and `/api/feed` to mitigate rate-limiting.
+- Initiated Phase 4: Optimization and Polish.
+
 ## [v4.1.0]
 - Added `expo-server-sdk` for sending mobile push notifications.
 - Created `/api/push/expo-send` route to broadcast notifications.

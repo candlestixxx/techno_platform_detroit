@@ -90,7 +90,11 @@ export async function GET(request: Request) {
     const paginatedFeed = combinedFeed.slice(skip, skip + limit);
     const hasMore = skip + limit < combinedFeed.length;
 
-    return NextResponse.json({ posts: paginatedFeed, hasMore });
+    return NextResponse.json({ posts: paginatedFeed, hasMore }, {
+      headers: {
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120"
+      }
+    });
   } catch (error) {
     console.error("Failed to fetch feed:", error);
     return NextResponse.json({ error: "Failed to fetch feed" }, { status: 500 });

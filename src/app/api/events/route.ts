@@ -16,7 +16,11 @@ export async function GET(request: Request) {
       coordinates: typeof event.coordinates === 'string' ? JSON.parse(event.coordinates) : event.coordinates,
     }));
 
-    return NextResponse.json(formattedEvents);
+    return NextResponse.json(formattedEvents, {
+      headers: {
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120"
+      }
+    });
   } catch (error) {
     console.error("Failed to fetch events:", error);
     return NextResponse.json({ error: "Failed to fetch events" }, { status: 500 });

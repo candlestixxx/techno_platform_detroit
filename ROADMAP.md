@@ -23,3 +23,6 @@ Major structural milestones:
 ## Phase 3: Mobile Hardening
 - [x] Implement Mobile Authentication Flow (JWT).
 - [x] Implement Expo Push Notifications.
+
+## Phase 4: Optimization and Polish
+- [ ] Implement Edge Caching headers across aggregated APIs.
