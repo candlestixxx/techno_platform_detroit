@@ -1,6 +1,7 @@
 # TODO.md
 
 Granular immediate tasks:
+- [x] Implement `react-native-maps` visualization in the Mobile Map Screen.
 - [x] Implement Edge Caching headers for Feed and Events API.
 - [x] Integrate Expo Push Notification sending logic (`expo-server-sdk`) with Admin Dashboard.
 - [x] Add `isAdmin` and `isApproved` flags to Prisma User model.

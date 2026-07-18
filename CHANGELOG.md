@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v4.3.0]
+- Installed `react-native-maps` into the Expo mobile application (`/mobile`).
+- Updated `MapScreen.js` to render a native interactive map displaying live event coordinates.
+
 ## [v4.2.0]
 - Added Edge Caching headers (`Cache-Control: public, s-maxage=60, stale-while-revalidate=120`) to `/api/events` and `/api/feed` to mitigate rate-limiting.
 - Initiated Phase 4: Optimization and Polish.
