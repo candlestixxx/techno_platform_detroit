@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [v4.4.0]
+- Added backend checkout integration and browser deep-linking logic to the Mobile Marketplace Screen (`mobile/src/screens/MarketplaceScreen.js`).
+
 ## [v4.3.0]
 - Installed `react-native-maps` into the Expo mobile application (`/mobile`).
 - Updated `MapScreen.js` to render a native interactive map displaying live event coordinates.

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Alert, Linking } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import config from '../config';
 const API_URL = config.API_URL;
@@ -29,6 +30,44 @@ export default function MarketplaceScreen() {
     );
   }
 
+  const handleCheckout = async (productId, title) => {
+    try {
+      const token = await AsyncStorage.getItem('@auth_token');
+      if (!token) {
+        Alert.alert("Authentication Required", "You must be logged in via the ID tab to make a purchase.");
+        return;
+      }
+
+      const res = await fetch(`${API_URL}/api/checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ productId })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.url) {
+        // Open the returned Stripe/Mock checkout URL in the device's browser
+        Alert.alert(
+           "Checkout Ready",
+           `Redirecting to secure payment for ${title}...`,
+           [
+             { text: "Cancel", style: "cancel" },
+             { text: "Proceed", onPress: () => Linking.openURL(data.url.startsWith('/') ? `${API_URL}${data.url}` : data.url) }
+           ]
+        );
+      } else {
+        Alert.alert("Error", data.error || "Checkout failed");
+      }
+    } catch (e) {
+      console.error(e);
+      Alert.alert("Network Error", "Failed to initiate checkout");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>THE EXCHANGE</Text>
@@ -48,7 +87,7 @@ export default function MarketplaceScreen() {
               <Text style={styles.price}>{item.price > 0 ? `$${item.price.toFixed(2)}` : "FREE"}</Text>
               <TouchableOpacity
                  style={styles.buyButton}
-                 onPress={() => Alert.alert('Checkout', `Navigating to checkout for ${item.title}...`)}
+                 onPress={() => handleCheckout(item.id, item.title)}
               >
                 <Text style={styles.buyText}>{item.type === 'LOCAL_PROMO_COUPON' ? 'CLAIM' : 'BUY'}</Text>
               </TouchableOpacity>
