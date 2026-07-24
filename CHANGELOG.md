@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v4.5.0]
+- Synced mobile application `ProfileScreen.js` to allow native profile editing (Name, Role).
+- Expanded `/api/profile` `PUT` route to support decoding JWT Bearer tokens from mobile clients.
+
 ## [v4.4.0]
 - Added backend checkout integration and browser deep-linking logic to the Mobile Marketplace Screen (`mobile/src/screens/MarketplaceScreen.js`).
 

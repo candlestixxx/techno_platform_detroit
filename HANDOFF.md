@@ -1,14 +1,14 @@
 # HANDOFF.md
 
-## Session Summary (v4.4.0)
+## Session Summary (v4.5.0)
 
-In this session, we continued Phase 4: Optimization and Polish by linking the Mobile Marketplace directly to the Next.js Stripe checkout proxy endpoint.
+In this session, we continued Phase 4: Optimization and Polish by bringing mobile profile editing parity with the web dashboard.
 
 ### Key Milestones Achieved:
-1. **Mobile Checkout Auth:** Integrated `AsyncStorage` token retrieval into `MarketplaceScreen.js` to authorize checkout POST requests securely.
-2. **Deep-linking Simulation:** Leveraged React Native's `Linking` API to open device browsers towards the Stripe checkout (or simulated mock URLs) based on backend response payloads.
+1. **Mobile PUT JWT Authentication:** Extended the `/api/profile` `PUT` route to manually intercept and parse `Bearer` JWT tokens when a NextAuth session cookie is unavailable.
+2. **Profile Screen Editing State:** Refactored `mobile/src/screens/ProfileScreen.js` with `TextInput` state toggles allowing users to natively update their Name and account Role directly from the mobile app.
 
 ### Notes for Next Model/Developer:
-- **Stripe SDK on Mobile:** Mobile applications typically utilize a native Stripe SDK (`@stripe/stripe-react-native`). However, since the Next.js web portal handles heavy logic securely, bridging the mobile app to web URLs keeps the architecture lightweight for Phase 4.
+- **Next Steps:** Phase 4 is nearing completion. Review `TODO.md` to ensure all granular features are implemented across the stack. Ensure the system maintains its 100% type-safety and passing CI states.
 - **Next Steps:** Continue resolving the final granular tasks in `TODO.md` to fully finalize the Detroit Underground Hub build.
 - **Testing:** The system architecture remains robust. All web testing (Jest/Playwright) passes smoothly.

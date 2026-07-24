@@ -24,6 +24,10 @@ export default function ProfileScreen() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editRole, setEditRole] = useState('');
+
   useEffect(() => {
     const checkToken = async () => {
         try {
@@ -98,6 +102,8 @@ export default function ProfileScreen() {
       })
       .then(data => {
         setProfile(data);
+        setEditName(data.name || '');
+        setEditRole(data.role || 'USER');
         setLoading(false);
       })
       .catch(err => {
@@ -128,6 +134,31 @@ export default function ProfileScreen() {
           }
       } catch (err) {
           setError('Network error');
+          setLoading(false);
+      }
+  };
+
+  const handleUpdateProfile = async () => {
+      setLoading(true);
+      try {
+          const res = await fetch(`${API_URL}/api/profile`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${authToken}`
+              },
+              body: JSON.stringify({ name: editName, role: editRole })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+              setProfile(data.user);
+              setIsEditing(false);
+          } else {
+              alert(data.error || "Update failed");
+          }
+      } catch (err) {
+          alert("Network error");
+      } finally {
           setLoading(false);
       }
   };
@@ -174,9 +205,43 @@ export default function ProfileScreen() {
         <View style={styles.avatar}>
            <Text style={styles.avatarText}>{profile?.name?.charAt(0) || 'U'}</Text>
         </View>
-        <Text style={styles.name}>{profile?.name || "Anonymous User"}</Text>
-        <Text style={styles.email}>{profile?.email}</Text>
-        <View style={styles.badge}><Text style={styles.badgeText}>{profile?.role}</Text></View>
+
+        {isEditing ? (
+            <View style={{ width: '100%', alignItems: 'center' }}>
+                <TextInput
+                    style={[styles.input, { width: '80%', marginBottom: 10, textAlign: 'center' }]}
+                    value={editName}
+                    onChangeText={setEditName}
+                    placeholder="Your Name"
+                    placeholderTextColor="#666"
+                />
+                <TextInput
+                    style={[styles.input, { width: '80%', marginBottom: 10, textAlign: 'center' }]}
+                    value={editRole}
+                    onChangeText={setEditRole}
+                    placeholder="Role (USER, ARTIST, BUSINESS)"
+                    placeholderTextColor="#666"
+                    autoCapitalize="characters"
+                />
+                <View style={{ flexDirection: 'row', gap: 10 }}>
+                    <TouchableOpacity style={[styles.loginBtn, { padding: 10, flex: 1 }]} onPress={handleUpdateProfile}>
+                        <Text style={styles.loginBtnText}>SAVE</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.loginBtn, { padding: 10, flex: 1, backgroundColor: '#333' }]} onPress={() => setIsEditing(false)}>
+                        <Text style={[styles.loginBtnText, { color: '#888' }]}>CANCEL</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        ) : (
+            <>
+                <Text style={styles.name}>{profile?.name || "Anonymous User"}</Text>
+                <Text style={styles.email}>{profile?.email}</Text>
+                <View style={styles.badge}><Text style={styles.badgeText}>{profile?.role}</Text></View>
+                <TouchableOpacity onPress={() => setIsEditing(true)} style={{ marginTop: 10 }}>
+                    <Text style={{ color: '#39ff14', fontSize: 12, fontWeight: 'bold' }}>EDIT ID</Text>
+                </TouchableOpacity>
+            </>
+        )}
       </View>
 
       <Text style={styles.sectionHeader}>EVENT TICKETS</Text>
