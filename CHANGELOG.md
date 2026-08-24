@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v4.6.0]
+- Added message composition UI to the mobile application `FeedScreen.js`.
+- Expanded `/api/feed` `POST` route to extract and verify mobile JWT Bearer tokens.
+
 ## [v4.5.0]
 - Synced mobile application `ProfileScreen.js` to allow native profile editing (Name, Role).
 - Expanded `/api/profile` `PUT` route to support decoding JWT Bearer tokens from mobile clients.

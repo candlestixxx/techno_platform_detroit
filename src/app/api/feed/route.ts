@@ -103,9 +103,26 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    let userId = null;
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user || !(session.user as any).id) {
+    if (session && session.user && (session.user as any).id) {
+        userId = (session.user as any).id;
+    } else {
+        const authHeader = request.headers.get("authorization");
+        if (authHeader && authHeader.startsWith("Bearer ")) {
+            const token = authHeader.split(" ")[1];
+            try {
+                const jwt = require("jsonwebtoken");
+                const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET || "fallback_secret_for_local_scaffolding");
+                userId = decoded.id;
+            } catch (err) {
+                return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+            }
+        }
+    }
+
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -115,7 +132,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing post content" }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({ where: { id: (session.user as any).id } });
+    const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     const newPost = await prisma.post.create({
