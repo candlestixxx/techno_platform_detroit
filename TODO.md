@@ -1,6 +1,7 @@
 # TODO.md
 
 Granular immediate tasks:
+- [x] Integrate Mobile Feed posting logic with the `/api/feed` backend.
 - [x] Sync Mobile Profile UI logic with the `/api/profile` backend.
 - [x] Implement Mobile Marketplace deep-linking checkout integration logic.
 - [x] Implement `react-native-maps` visualization in the Mobile Map Screen.
