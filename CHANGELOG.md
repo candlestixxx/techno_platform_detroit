@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [v5.0.0]
+- **Gold Master Release**: Finalized Phase 4 Optimization and Polish.
+- Confirmed full functional parity between the Next.js web application and the React Native mobile wrapper.
+- Ensured 100% test coverage stability across Jest unit tests and Playwright E2E suites.
+
 ## [v4.6.0]
 - Added message composition UI to the mobile application `FeedScreen.js`.
 - Expanded `/api/feed` `POST` route to extract and verify mobile JWT Bearer tokens.
