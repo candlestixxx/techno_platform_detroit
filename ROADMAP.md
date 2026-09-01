@@ -25,4 +25,5 @@ Major structural milestones:
 - [x] Implement Expo Push Notifications.
 
 ## Phase 4: Optimization and Polish
-- [ ] Implement Edge Caching headers across aggregated APIs.
+- [x] Implement Edge Caching headers across aggregated APIs.
+- [x] Finalize Mobile Wrapper integration (Feed, Maps, Checkout, Auth, Profile).
