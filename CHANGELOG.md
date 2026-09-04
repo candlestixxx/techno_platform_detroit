@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [v5.2.0]
+- Added web application `/inbox` UI component rendering split-pane chat histories natively connected to the `/api/dm` schema.
+
 ## [v5.1.0]
 - **Initiated Phase 5: Community Expansion.**
 - Added `Conversation` and `DirectMessage` models to `schema.prisma`.
