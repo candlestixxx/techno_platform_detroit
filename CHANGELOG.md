@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [v5.3.0]
+- Added `mobile/src/screens/InboxScreen.js` resolving Direct Messaging UI for the mobile application.
+- Decoded mobile JWT payloads natively utilizing standard Node `.buffer` packages via `--legacy-peer-deps`.
+- Wired `InboxScreen` into the primary Tab Navigator within `App.js`.
+
 ## [v5.2.0]
 - Added web application `/inbox` UI component rendering split-pane chat histories natively connected to the `/api/dm` schema.
 

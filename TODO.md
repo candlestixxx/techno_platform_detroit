@@ -3,6 +3,7 @@
 **Phase 4 Optimization and Polish is complete.** All structural features and integration checkpoints have been cleared.
 
 Granular immediate tasks:
+- [x] Implement React Native Mobile UI `/mobile/src/screens/InboxScreen.js` for the Direct Messaging System to ensure full platform parity.
 - [x] Implement frontend `/inbox` web UI for the Direct Messaging system.
 - [x] Implement backend Prisma models and API handlers for the Direct Messaging system.
 - [x] Declare Gold Master.

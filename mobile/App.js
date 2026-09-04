@@ -7,6 +7,7 @@ import FeedScreen from './src/screens/FeedScreen';
 import MapScreen from './src/screens/MapScreen';
 import MarketplaceScreen from './src/screens/MarketplaceScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import InboxScreen from './src/screens/InboxScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,6 +39,7 @@ export default function App() {
         <Tab.Screen name="Feed" component={FeedScreen} options={{ title: 'THE HUB' }} />
         <Tab.Screen name="Map" component={MapScreen} options={{ title: 'RADAR' }} />
         <Tab.Screen name="Store" component={MarketplaceScreen} options={{ title: 'EXCHANGE' }} />
+        <Tab.Screen name="Inbox" component={InboxScreen} options={{ title: 'COMM' }} />
         <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'ID' }} />
       </Tab.Navigator>
     </NavigationContainer>
