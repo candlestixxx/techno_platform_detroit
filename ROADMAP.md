@@ -27,3 +27,6 @@ Major structural milestones:
 ## Phase 4: Optimization and Polish
 - [x] Implement Edge Caching headers across aggregated APIs.
 - [x] Finalize Mobile Wrapper integration (Feed, Maps, Checkout, Auth, Profile).
+
+## Phase 5: Community Expansion
+- [ ] Implement Direct Messaging System.

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [v5.1.0]
+- **Initiated Phase 5: Community Expansion.**
+- Added `Conversation` and `DirectMessage` models to `schema.prisma`.
+- Created `/api/dm/route.ts` to handle fetching and dispatching direct messages.
+
 ## [v5.0.0]
 - **Gold Master Release**: Finalized Phase 4 Optimization and Polish.
 - Confirmed full functional parity between the Next.js web application and the React Native mobile wrapper.
