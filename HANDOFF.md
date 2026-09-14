@@ -1,15 +1,13 @@
 # HANDOFF.md
 
-## Session Summary (v5.3.0)
+## Session Summary (v5.4.0)
 
-In this session, we finalized the Phase 5 Direct Messaging expansion by building out the React Native Inbox interface, bringing the mobile app back into full functional parity with the web platform.
+In this session, we continued building out Phase 5: Community Expansion by introducing backend architecture for Event Ratings and Reviews.
 
 ### Key Milestones Achieved:
-1. **Mobile Inbox Screen:** Built `InboxScreen.js` inside the mobile wrapper, establishing an authenticated React Native environment for direct user-to-user chat.
-2. **JWT Payload Decoding:** Safely implemented mobile-side `buffer` parsing to decode standard web JWT payloads for user ID extraction, preventing the need for secondary API routing just to identify the client.
-3. **Tab Routing:** Mounted the Inbox under the "COMM" tab inside the Expo app's primary navigation hierarchy.
+1. **Event Review Schema:** Added the `EventReview` Prisma model enforcing a one-to-one unique composite constraint between a `User` and a specific `Event`.
+2. **Event Review Endpoint:** Scaffolded `src/app/api/events/[id]/reviews/route.ts` enabling authenticated users to upsert star ratings and written reviews against events.
 
 ### Notes for Next Model/Developer:
-- **Mobile Dependencies:** Since React Native does not natively ship `atob` or `Buffer`, a legacy peer-dep for standard Node `buffer` was injected to decrypt the JWT.
-- **Next Steps:** Phase 5 initial milestones are structurally complete.
+- **Frontend Next Steps:** While the backend handles `upsert` logic correctly based on `getServerSession` tokens, there is currently no frontend component (Web or Mobile) hooked into this API. The next step involves rendering a dynamic "Event Details" page or modal with a 5-star rating submission form.
 - **Testing:** Web functionality and components compile successfully. All Playwright and Jest tests remain unbroken.

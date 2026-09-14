@@ -6,13 +6,29 @@ import { authOptions } from "../auth/[...nextauth]/route";
 // GET conversations for the current user or a specific conversation if targetUserId is provided
 export async function GET(request: Request) {
   try {
+    let userId = null;
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user || !(session.user as any).id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (session && session.user && (session.user as any).id) {
+        userId = (session.user as any).id;
+    } else {
+        const authHeader = request.headers.get("authorization");
+        if (authHeader && authHeader.startsWith("Bearer ")) {
+            const token = authHeader.split(" ")[1];
+            try {
+                if (!process.env.NEXTAUTH_SECRET) throw new Error("Missing NextAuth Secret");
+                const jwt = require("jsonwebtoken");
+                const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
+                userId = decoded.id;
+            } catch (err) {
+                return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+            }
+        }
     }
 
-    const userId = (session.user as any).id;
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const { searchParams } = new URL(request.url);
     const targetUserId = searchParams.get("targetUserId");
 
@@ -64,13 +80,29 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    let userId = null;
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user || !(session.user as any).id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (session && session.user && (session.user as any).id) {
+        userId = (session.user as any).id;
+    } else {
+        const authHeader = request.headers.get("authorization");
+        if (authHeader && authHeader.startsWith("Bearer ")) {
+            const token = authHeader.split(" ")[1];
+            try {
+                if (!process.env.NEXTAUTH_SECRET) throw new Error("Missing NextAuth Secret");
+                const jwt = require("jsonwebtoken");
+                const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
+                userId = decoded.id;
+            } catch (err) {
+                return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+            }
+        }
     }
 
-    const userId = (session.user as any).id;
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const { targetUserId, content } = await request.json();
 
     if (!targetUserId || !content) {

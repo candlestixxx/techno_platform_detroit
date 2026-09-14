@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v5.4.0]
+- Added `EventReview` Prisma schema linking `User` and `Event` models.
+- Constructed `/api/events/[id]/reviews` API endpoint to handle fetching and upserting user ratings.
+
 ## [v5.3.0]
 - Added `mobile/src/screens/InboxScreen.js` resolving Direct Messaging UI for the mobile application.
 - Decoded mobile JWT payloads natively utilizing standard Node `.buffer` packages via `--legacy-peer-deps`.
