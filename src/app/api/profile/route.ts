@@ -16,8 +16,9 @@ export async function GET(request: Request) {
         if (authHeader && authHeader.startsWith("Bearer ")) {
             const token = authHeader.split(" ")[1];
             try {
+                if (!process.env.NEXTAUTH_SECRET) throw new Error("Missing NextAuth Secret");
                 const jwt = require("jsonwebtoken");
-                const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET || "fallback_secret_for_local_scaffolding");
+                const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
                 userId = decoded.id;
             } catch (err) {
                 return NextResponse.json({ error: "Invalid token" }, { status: 401 });
@@ -85,8 +86,9 @@ export async function PUT(request: Request) {
         if (authHeader && authHeader.startsWith("Bearer ")) {
             const token = authHeader.split(" ")[1];
             try {
+                if (!process.env.NEXTAUTH_SECRET) throw new Error("Missing NextAuth Secret");
                 const jwt = require("jsonwebtoken");
-                const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET || "fallback_secret_for_local_scaffolding");
+                const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
                 userId = decoded.id;
             } catch (err) {
                 return NextResponse.json({ error: "Invalid token" }, { status: 401 });
