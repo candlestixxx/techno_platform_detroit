@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v5.5.0]
+- Added dynamic `src/app/events/[id]/page.tsx` rendering specific event data.
+- Added UI component for authenticated users to leave 5-star ratings and written reviews, communicating with the `/api/events/[id]/reviews` endpoint.
+
 ## [v5.4.0]
 - Added `EventReview` Prisma schema linking `User` and `Event` models.
 - Constructed `/api/events/[id]/reviews` API endpoint to handle fetching and upserting user ratings.
