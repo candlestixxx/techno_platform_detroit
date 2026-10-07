@@ -1,13 +1,13 @@
 # HANDOFF.md
 
-## Session Summary (v5.4.0)
+## Session Summary (v5.5.0)
 
-In this session, we continued building out Phase 5: Community Expansion by introducing backend architecture for Event Ratings and Reviews.
+In this session, we integrated the Phase 5 Event Ratings and Reviews backend logic into the web frontend via a new dynamic route.
 
 ### Key Milestones Achieved:
-1. **Event Review Schema:** Added the `EventReview` Prisma model enforcing a one-to-one unique composite constraint between a `User` and a specific `Event`.
-2. **Event Review Endpoint:** Scaffolded `src/app/api/events/[id]/reviews/route.ts` enabling authenticated users to upsert star ratings and written reviews against events.
+1. **Event Details Page:** Scaffolded `src/app/events/[id]/page.tsx` serving as a dedicated information hub for individual events.
+2. **Review Form UI:** Implemented a stateful 5-star selector and text area hooked into the `/api/events/[id]/reviews` `POST` endpoint, along with a mapping function to display community intel historically.
 
 ### Notes for Next Model/Developer:
-- **Frontend Next Steps:** While the backend handles `upsert` logic correctly based on `getServerSession` tokens, there is currently no frontend component (Web or Mobile) hooked into this API. The next step involves rendering a dynamic "Event Details" page or modal with a 5-star rating submission form.
+- **Mobile Integration Next Steps:** The next step is to ensure mobile parity. The React Native Expo wrapper lacks an `EventDetailsScreen` capable of displaying these reviews or sending authenticated JWT payloads to the review endpoint.
 - **Testing:** Web functionality and components compile successfully. All Playwright and Jest tests remain unbroken.
