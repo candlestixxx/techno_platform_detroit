@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import HybridSocialFeed from "@/components/feed/HybridSocialFeed";
 import HeaderAuth from "@/components/layout/HeaderAuth";
 
@@ -33,14 +34,14 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen bg-black text-gray-100 overflow-hidden font-sans">
       <header className="bg-gray-900 border-b border-gray-800 p-4 shrink-0 flex items-center justify-between">
-        <h1 className="text-2xl font-black tracking-tighter uppercase text-white">
+        <Link href="/" className="text-2xl font-black tracking-tighter uppercase text-white hover:opacity-90 transition">
           Detroit <span className="text-gray-500">Underground</span> Hub
-        </h1>
+        </Link>
 
-        <nav className="flex gap-4">
+        <nav className="flex items-center gap-2 sm:gap-4">
           <button
             onClick={() => setActiveTab("feed")}
-            className={`font-bold uppercase tracking-wider text-sm px-4 py-2 rounded transition-colors ${
+            className={`font-bold uppercase tracking-wider text-sm px-3 sm:px-4 py-2 rounded transition-colors ${
               activeTab === "feed" ? "bg-purple-600 text-white" : "text-gray-400 hover:text-white hover:bg-gray-800"
             }`}
           >
@@ -48,30 +49,31 @@ export default function Home() {
           </button>
           <button
             onClick={() => setActiveTab("map")}
-            className={`font-bold uppercase tracking-wider text-sm px-4 py-2 rounded transition-colors ${
+            className={`font-bold uppercase tracking-wider text-sm px-3 sm:px-4 py-2 rounded transition-colors ${
               activeTab === "map" ? "bg-purple-600 text-white" : "text-gray-400 hover:text-white hover:bg-gray-800"
             }`}
           >
             Explore Map
           </button>
-          <a
+          <Link
             href="/forum"
-            className="font-bold uppercase tracking-wider text-sm px-4 py-2 rounded text-gray-300 hover:bg-gray-800 transition-colors border border-transparent"
+            className="font-bold uppercase tracking-wider text-sm px-3 sm:px-4 py-2 rounded text-gray-300 hover:bg-gray-800 transition-colors border border-transparent"
           >
             Forum
-          </a>
-          <a
+          </Link>
+          <Link
             href="/marketplace"
-            className="font-bold uppercase tracking-wider text-sm px-4 py-2 rounded text-emerald-400 hover:bg-emerald-900/30 transition-colors border border-emerald-800/50"
+            className="font-bold uppercase tracking-wider text-sm px-3 sm:px-4 py-2 rounded text-emerald-400 hover:bg-emerald-900/30 transition-colors border border-emerald-800/50"
           >
             Marketplace
-          </a>
-          <a
-            href="/profile"
-            className="font-bold uppercase tracking-wider text-sm px-4 py-2 rounded text-gray-300 hover:bg-gray-800 transition-colors border border-transparent"
+          </Link>
+          <Link
+            href="/dashboard"
+            className="font-bold uppercase tracking-wider text-sm px-3 sm:px-4 py-2 rounded text-yellow-400 hover:bg-yellow-950/40 transition-colors border border-yellow-800/40"
+            title="Consolidated Hub Dashboard & Analytics"
           >
-            Profile
-          </a>
+            Dashboard
+          </Link>
           <HeaderAuth />
         </nav>
       </header>

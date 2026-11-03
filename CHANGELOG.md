@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [v5.6.0]
+- **Unified Central Dashboard:** Built consolidated `/dashboard` aggregating business analytics, admin governance moderation (flagged posts, flagged events, vendor approvals), mobile broadcast push notifications, and high-value platform navigation into a single seamless interface.
+- **Interactive Guidance:** Added contextual tooltips and descriptive guidance markers across all dashboard metrics and actions.
+- **Subpage Consolidation:** Updated `/dashboard/business` to integrate cleanly with the primary dashboard while preserving backward compatibility.
+- **System Tray & Server Controller:** Added `scripts/tray_server.py` with desktop system tray capabilities and headless CLI daemon mode for status inspection, logging, and graceful server process termination.
+- **Script Clean-Up:** Organized `scripts/` directory non-destructively, archiving exploratory scripts into `scripts/archive/` and adding `scripts/README.md`.
+
 ## [v5.5.0]
 - Added dynamic `src/app/events/[id]/page.tsx` rendering specific event data.
 - Added UI component for authenticated users to leave 5-star ratings and written reviews, communicating with the `/api/events/[id]/reviews` endpoint.

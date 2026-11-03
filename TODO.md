@@ -1,8 +1,12 @@
 # TODO.md
 
-**Phase 4 Optimization and Polish is complete.** All structural features and integration checkpoints have been cleared.
+**Phase 5 Community Expansion & Dashboard Consolidation is complete.** All structural features and integration checkpoints have been cleared.
 
-Granular immediate tasks:
+Granular tasks:
+- [x] Consolidate fragmented dashboard subpages into unified `/dashboard` with descriptive tooltips and hierarchical prioritization.
+- [x] Implement System Tray & Server Process Daemon (`scripts/tray_server.py`) with status reporting, log monitoring, and quit server handling.
+- [x] Add npm convenience scripts (`server:status`, `server:stop`, `tray`) into `package.json`.
+- [x] Reorganize `scripts/` directory non-destructively, archiving one-off exploration scripts.
 - [x] Implement frontend `/events/[id]` UI mapping Event details alongside a 5-star Rating & Review submission form.
 - [x] Implement `EventReview` backend Prisma models and REST endpoints (`/api/events/[id]/reviews`).
 - [x] Implement React Native Mobile UI `/mobile/src/screens/InboxScreen.js` for the Direct Messaging System to ensure full platform parity.
@@ -25,3 +29,6 @@ Granular immediate tasks:
 - [x] Implement unified social/event feed (HybridSocialFeed).
 - [x] Add profile editing and professional role selection.
 - [x] Connect all navigation buttons and ensure auth flow is seamless.
+
+Immediate upcoming tasks:
+- [ ] Implement Mobile React Native `EventDetailsScreen` with event review submission and historical list parity.

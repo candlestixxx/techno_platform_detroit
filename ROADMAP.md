@@ -28,7 +28,13 @@ Major structural milestones:
 - [x] Implement Edge Caching headers across aggregated APIs.
 - [x] Finalize Mobile Wrapper integration (Feed, Maps, Checkout, Auth, Profile).
 
-## Phase 5: Community Expansion
+## Phase 5: Community Expansion & Consolidation
 - [x] Implement Direct Messaging System.
 - [x] Implement Event Ratings & Reviews System.
 - [x] Establish Web/Mobile Full Platform Parity for Phase 5.
+- [x] Implement Unified Central Dashboard `/dashboard` consolidating business analytics, moderation, and broadcast controls.
+- [x] Implement System Tray & Server Controller Daemon (`scripts/tray_server.py`) for process management and termination.
+
+## Phase 6: Autonomous Architecture & Expansion
+- [ ] Mobile Parity for Event Ratings and Reviews screen (`mobile/src/screens/EventDetailsScreen.js`).
+- [ ] Decentralized p2p sync for offline event caches during warehouse connectivity drops.
