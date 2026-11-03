@@ -1,28 +1,27 @@
 # HANDOFF.md
 
-## Session Summary (v5.6.0)
+## Session Summary (v5.7.0)
 
-In this session, we consolidated all dashboard and administrative operations into a single, high-value, intuitive command center at `/dashboard`, implemented a multi-mode server management and system tray controller (`scripts/tray_server.py`), and organized the automation scripts nondestructively.
+In this session, we completed mobile platform parity for Phase 5 Community Expansion by implementing the React Native `EventDetailsScreen` with event review display, community intel summaries, and 5-star review submissions, wired into the mobile feed. We also supported mobile JWT Bearer authentication on the review endpoint, resolved Playwright E2E testing selectors, and pinned GitHub Actions to `ubuntu-24.04`.
 
 ### Key Milestones Achieved:
-1. **Unified Hub Dashboard (`src/app/dashboard/page.tsx`):**
-   - Consolidated business coupon/product metrics and redemption breakdown from `/dashboard/business`.
-   - Consolidated admin moderation controls (pardon/delete flagged posts, pardon/delete flagged events, approve vendor businesses, broadcast push notifications to mobile devices).
-   - Embedded contextual tooltips (`?` indicators and hover overlays) on all key metrics and actions.
-   - Categorized by high-value tiers (Overview, Business, Admin Governance, Subsystems Directory).
-2. **Subpage & Navigation Redirection:**
-   - Updated `src/app/dashboard/business/page.tsx` to seamlessly notify and route users to the unified dashboard while keeping standalone functionality intact.
-   - Updated `src/components/layout/HeaderAuth.tsx` and `src/app/page.tsx` to link prominently to `/dashboard`.
-3. **System Tray & Server Controller (`scripts/tray_server.py`):**
-   - Supports desktop graphical tray icon with "Quit Servers" and status checking when DISPLAY/GUI is available.
-   - Features automated headless CLI daemon fallback for CI/containers.
-   - Wired into `package.json` with `npm run server:status`, `npm run server:stop`, and `npm run tray`.
-4. **Script Catalog & Non-destructive Reorganization:**
-   - Moved one-off diagnostic scripts into `scripts/archive/`.
-   - Created `scripts/README.md` documenting active and archived automation utilities.
-5. **Documentation & Version Governance:**
-   - Bumped version to `v5.6.0` across `VERSION.md`, `CHANGELOG.md`, `ROADMAP.md`, `TODO.md`, `VISION.md`, `MEMORY.md`, `DEPLOY.md`, and `IDEAS.md`.
+1. **Mobile Event Ratings & Reviews (`mobile/src/screens/EventDetailsScreen.js`):**
+   - Displays event details (title, venue, date, lineup).
+   - Shows live community intel summary with calculated average rating (`★ X.X / 5.0`).
+   - Interactive 5-star rating selector with optional vibe report comment input.
+   - Dispatches authenticated submissions to `/api/events/[id]/reviews` using stored `@auth_token` JWTs.
+2. **Mobile Feed Integration (`mobile/src/screens/FeedScreen.js`):**
+   - Rendered event update cards with distinct `EVENT INTEL →` tags.
+   - Tapping event cards opens `EventDetailsScreen` with a clean `< BACK TO FEED` navigation handler.
+3. **Backend JWT Authentication Expansion (`src/app/api/events/[id]/reviews/route.ts`):**
+   - Enhanced `POST` route to extract and verify mobile JWT Bearer tokens alongside standard NextAuth sessions.
+4. **CI & E2E Testing Stability:**
+   - Restored semantic `<h1>` header link in `src/app/page.tsx` for Playwright locators.
+   - Pinned GitHub Actions workflow runner to `ubuntu-24.04`.
+5. **Documentation & Governance Standards:**
+   - Version incremented to `v5.7.0` across all governance documentation files.
 
-### Notes for Next Model/Developer:
-- **Mobile Parity Next Step:** Implement `EventDetailsScreen` in `mobile/src/screens/` to mirror the web `/events/[id]` rating & review submission and list display.
-- **Verification:** Run `npm test` and `npm run build` to verify all builds and types pass cleanly.
+### Verification Results:
+- Jest Unit Tests: 11 passed (3 suites).
+- Playwright E2E Tests: 2 passed.
+- Next.js Production Build: 35 routes compiled cleanly.

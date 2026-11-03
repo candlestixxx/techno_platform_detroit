@@ -1,8 +1,11 @@
 # TODO.md
 
-**Phase 5 Community Expansion & Dashboard Consolidation is complete.** All structural features and integration checkpoints have been cleared.
+**Phase 5 Community Expansion, Dashboard Consolidation & Mobile Parity is complete.** All structural features and integration checkpoints have been cleared.
 
 Granular tasks:
+- [x] Implement Mobile React Native `EventDetailsScreen` with event review submission and historical list parity.
+- [x] Wire `EventDetailsScreen` into `FeedScreen.js` for seamless field report access and review filing.
+- [x] Add mobile JWT Bearer authentication support to `/api/events/[id]/reviews` POST handler.
 - [x] Consolidate fragmented dashboard subpages into unified `/dashboard` with descriptive tooltips and hierarchical prioritization.
 - [x] Implement System Tray & Server Process Daemon (`scripts/tray_server.py`) with status reporting, log monitoring, and quit server handling.
 - [x] Add npm convenience scripts (`server:status`, `server:stop`, `tray`) into `package.json`.
@@ -30,5 +33,5 @@ Granular tasks:
 - [x] Add profile editing and professional role selection.
 - [x] Connect all navigation buttons and ensure auth flow is seamless.
 
-Immediate upcoming tasks:
-- [ ] Implement Mobile React Native `EventDetailsScreen` with event review submission and historical list parity.
+Upcoming roadmap targets:
+- [ ] Offline BLE mesh peer-to-peer sync for basement warehouse parties.
