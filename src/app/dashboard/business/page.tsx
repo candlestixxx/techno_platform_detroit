@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 export default function BusinessDashboard() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);

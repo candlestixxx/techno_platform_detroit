@@ -43,7 +43,7 @@ export default function UnifiedDashboard() {
   const [businessData, setBusinessData] = useState<any>(null);
   const [adminData, setAdminData] = useState<any>({ flaggedPosts: [], flaggedEvents: [], unapprovedBusinesses: [] });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [, setError] = useState("");
 
   // Broadcast push state
   const [pushTitle, setPushTitle] = useState("");
@@ -52,7 +52,6 @@ export default function UnifiedDashboard() {
   const [pushFeedback, setPushFeedback] = useState<string | null>(null);
 
   const isAdmin = (session?.user as any)?.role === "ADMIN" || (session?.user as any)?.isAdmin;
-  const isBusiness = (session?.user as any)?.role === "BUSINESS" || isAdmin;
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -130,7 +129,7 @@ export default function UnifiedDashboard() {
         const err = await res.json();
         setPushFeedback(`✗ Failed: ${err.error || "Unknown error"}`);
       }
-    } catch (err) {
+    } catch {
       setPushFeedback("✗ Connection error dispatching notification.");
     } finally {
       setSendingPush(false);
