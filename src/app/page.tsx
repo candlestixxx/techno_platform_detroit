@@ -34,9 +34,11 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen bg-black text-gray-100 overflow-hidden font-sans">
       <header className="bg-gray-900 border-b border-gray-800 p-4 shrink-0 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-black tracking-tighter uppercase text-white hover:opacity-90 transition">
-          Detroit <span className="text-gray-500">Underground</span> Hub
-        </Link>
+        <h1 className="text-2xl font-black tracking-tighter uppercase text-white">
+          <Link href="/" className="hover:opacity-90 transition">
+            Detroit <span className="text-gray-500">Underground</span> Hub
+          </Link>
+        </h1>
 
         <nav className="flex items-center gap-2 sm:gap-4">
           <button
