@@ -32,13 +32,29 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    let userId = null;
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user || !(session.user as any).id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (session && session.user && (session.user as any).id) {
+      userId = (session.user as any).id;
+    } else {
+      const authHeader = request.headers.get("authorization");
+      if (authHeader && authHeader.startsWith("Bearer ")) {
+        const token = authHeader.split(" ")[1];
+        try {
+          if (!process.env.NEXTAUTH_SECRET) throw new Error("Missing NextAuth Secret");
+          const jwt = require("jsonwebtoken");
+          const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
+          userId = decoded.id;
+        } catch {
+          return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+        }
+      }
     }
 
-    const userId = (session.user as any).id;
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const eventId = (await params).id;
     const { rating, content } = await request.json();
 

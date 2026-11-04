@@ -7,7 +7,10 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "lint": "eslint"
+    "lint": "eslint",
+    "server:status": "python3 scripts/tray_server.py --status",
+    "server:stop": "python3 scripts/tray_server.py --stop",
+    "tray": "python3 scripts/tray_server.py"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
