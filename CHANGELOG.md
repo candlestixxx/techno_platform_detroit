@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [v5.8.0]
+- **Event Reviews Unit Test Suite:** Implemented `__tests__/reviews.test.ts` providing rigorous unit test coverage for `GET` and `POST` routes on `/api/events/[id]/reviews`.
+- **Edge Case & Security Testing:** Added automated test assertions for missing/invalid rating scores (out of range, non-integer), unauthorized access responses (401), missing event entity errors (404), NextAuth web session resolution, and mobile JWT Bearer token authorization.
+- **Mobile Platform Testing Parity:** Validated authenticated review payloads transmitted from both web and React Native mobile clients.
+
 ## [v5.7.0]
 - **Mobile Event Ratings & Reviews Parity:** Created `mobile/src/screens/EventDetailsScreen.js` providing mobile event intel display, average rating calculations, historical review listings, and interactive 5-star ratings submission.
 - **Mobile Feed Integration:** Updated `mobile/src/screens/FeedScreen.js` to allow users to tap event cards to open event details, view community reports, and file reviews.

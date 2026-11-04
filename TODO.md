@@ -1,8 +1,9 @@
 # TODO.md
 
-**Phase 5 Community Expansion, Dashboard Consolidation & Mobile Parity is complete.** All structural features and integration checkpoints have been cleared.
+**Phase 5 Community Expansion, Dashboard Consolidation & Mobile Parity is complete.** All structural features, mobile wrappers, and test suites have been cleared.
 
 Granular tasks:
+- [x] Create comprehensive Jest unit test suite for Event Reviews API (`__tests__/reviews.test.ts`) covering edge cases and auth modes.
 - [x] Implement Mobile React Native `EventDetailsScreen` with event review submission and historical list parity.
 - [x] Wire `EventDetailsScreen` into `FeedScreen.js` for seamless field report access and review filing.
 - [x] Add mobile JWT Bearer authentication support to `/api/events/[id]/reviews` POST handler.
@@ -33,5 +34,5 @@ Granular tasks:
 - [x] Add profile editing and professional role selection.
 - [x] Connect all navigation buttons and ensure auth flow is seamless.
 
-Upcoming roadmap targets:
+Upcoming Phase 6 targets:
 - [ ] Offline BLE mesh peer-to-peer sync for basement warehouse parties.

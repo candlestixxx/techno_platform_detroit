@@ -35,6 +35,7 @@ Major structural milestones:
 - [x] Implement Unified Central Dashboard `/dashboard` consolidating business analytics, moderation, and broadcast controls.
 - [x] Implement System Tray & Server Controller Daemon (`scripts/tray_server.py`) for process management and termination.
 - [x] Mobile Event Details & Ratings Parity (`mobile/src/screens/EventDetailsScreen.js`).
+- [x] Automated Test Harness for Event Ratings & Mobile Authentication (`__tests__/reviews.test.ts`).
 
 ## Phase 6: Autonomous Architecture & Expansion
 - [ ] Decentralized p2p sync for offline event caches during warehouse connectivity drops.
