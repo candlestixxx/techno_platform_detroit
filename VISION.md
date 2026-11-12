@@ -8,3 +8,5 @@ Core foundational concepts:
 - Dark mode industrial minimalist aesthetic by default (Techno flyers inspired).
 - Heavy accentuation on 4 core profile models: User, Artist (DJs), Business, and Non-Profit.
 - Deliver absolute type safety and robust error handling for scraping and marketplace flows.
+- High-value consolidated operations: Unifying analytics, moderation, vendor vetting, and broadcasts into single-pane control dashboards.
+- Continuous autonomous execution and process supervision via daemon and system tray utilities.

@@ -1,6 +1,6 @@
 # DEPLOY.md
 
-Latest deployment and environment setup instructions for Vercel.
+Latest deployment and environment setup instructions for Vercel and local environments.
 
 ## Local Development
 1. Ensure Node.js 18+ and npm are installed.
@@ -10,6 +10,10 @@ Latest deployment and environment setup instructions for Vercel.
 5. Generate Prisma Client: `npx prisma generate`
 6. Build project: `npm run build`
 7. Start server: `npm start`
+8. Server Management:
+   - Check status: `npm run server:status`
+   - Gracefully stop: `npm run server:stop`
+   - Monitor via daemon / system tray: `npm run tray`
 
 ## Vercel Production Deployment
 

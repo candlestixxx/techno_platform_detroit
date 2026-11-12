@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, TextInput, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import EventDetailsScreen from './EventDetailsScreen';
+
 // Use local machine IP or production domain.
 // 10.0.2.2 is the standard Android emulator alias for localhost.
 import config from '../config';
@@ -14,6 +16,7 @@ export default function FeedScreen() {
 
   const [postContent, setPostContent] = useState('');
   const [posting, setPosting] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const fetchFeed = () => {
     fetch(`${API_URL}/api/feed`)
@@ -86,6 +89,10 @@ export default function FeedScreen() {
     );
   }
 
+  if (selectedEvent) {
+    return <EventDetailsScreen event={selectedEvent} onBack={() => setSelectedEvent(null)} />;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.composeBox}>
@@ -108,12 +115,27 @@ export default function FeedScreen() {
       <FlatList
         data={feed}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.postCard}>
-            <Text style={styles.author}>{item.author?.name || 'System Update'}</Text>
-            <Text style={styles.content}>{item.content || item.title}</Text>
-          </View>
-        )}
+        renderItem={({ item }) => {
+          const isEvent = item.type === 'EVENT_UPDATE' || !!item.metadata?.eventDate;
+          return (
+            <TouchableOpacity
+              style={styles.postCard}
+              activeOpacity={isEvent ? 0.7 : 1}
+              onPress={() => {
+                if (isEvent) setSelectedEvent(item);
+              }}
+            >
+              <View style={styles.postHeader}>
+                <Text style={styles.author}>{item.author?.name || item.author || 'System Update'}</Text>
+                {isEvent && <Text style={styles.eventTag}>EVENT INTEL →</Text>}
+              </View>
+              <Text style={styles.content}>{item.content || item.title}</Text>
+              {isEvent && (
+                <Text style={styles.tapPrompt}>Tap to view field reports & submit review</Text>
+              )}
+            </TouchableOpacity>
+          );
+        }}
         ListEmptyComponent={<Text style={styles.text}>No updates on the network yet.</Text>}
       />
     </View>
@@ -137,6 +159,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333'
   },
-  author: { color: '#39ff14', fontWeight: 'bold', marginBottom: 5 },
-  content: { color: '#ccc', fontSize: 14 }
+  postHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 },
+  author: { color: '#39ff14', fontWeight: 'bold' },
+  eventTag: { color: '#000', backgroundColor: '#39ff14', fontSize: 10, fontWeight: 'bold', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 3 },
+  content: { color: '#ccc', fontSize: 14 },
+  tapPrompt: { color: '#888', fontSize: 11, fontStyle: 'italic', marginTop: 8 }
 });
