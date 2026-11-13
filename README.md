@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Detroit Underground (techno_platform_detroit)
 
-## Getting Started
+A platform for the Detroit techno / underground music scene: events,
+ratings and reviews, a unified hub dashboard, and a companion mobile app.
 
-First, run the development server:
+Stack: Next.js 16 / React 19, Prisma (PostgreSQL), NextAuth, Stripe,
+Socket.io, Mapbox, web-push. A Python system-tray daemon
+(`scripts/tray_server.py`) manages the local server. Mobile app lives in
+`mobile/` (Expo).
+
+## Status
+
+**Active.** Version 5.8.0. Last activity: 2026-11-12 (forward-merge of the
+v5.8.0 branch — reviews unit tests and mobile parity — plus a CHANGELOG
+history restore). Recent work: mobile event-ratings parity (v5.7.0),
+unified hub dashboard and system-tray daemon (v5.6.0).
+
+Note: the previous README was the stock `create-next-app` boilerplate and
+described nothing about this project. This revision replaces it.
+
+## What's working
+
+Per recent commit history and the codebase:
+
+- Event ratings and reviews, with unit tests.
+- Mobile app parity with the web dashboard.
+- Unified hub dashboard.
+- System tray daemon for local server management (`npm run tray`).
+- Jest unit tests and Playwright e2e tests exist in-repo.
+
+## What's not verified
+
+- No live deployment is confirmed in the repo. A `vercel.json` exists,
+  but no production URL or deployment status is documented.
+- No users, revenue, or real-world usage is on record.
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # starts the custom server (server.js)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other commands:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm test           # Jest
+npm run build && npm start   # production build
+npm run tray       # system tray daemon
+npm run server:status        # daemon status
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Links
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Repo: https://github.com/candlestixxx/techno_platform_detroit
+- Related docs in-repo: `CHANGELOG.md`, `ROADMAP.md`, `TODO.md`,
+  `DEPLOY.md`, `HANDOFF.md`, `VISION.md`
